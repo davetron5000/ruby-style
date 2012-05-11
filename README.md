@@ -1,243 +1,3 @@
-## Design
-
-#### Classes should do one thing and one thing only
-
-
-
-#### If a class has only one method, consider using a lambda or proc instead
-
-Why? _A class with one method, especially Doer.do, is just a function, so make it a lambda_
-
-
-#### For a base class with abstract methods, include the methods in the base class and have them raise.
-
-Why? _This gives you a single place to document the methods subclasses are expected to implement, and ensures that, at least at runtime, they *are* implemented_
-
-
-#### Avoid instantiating classes inside other classes.  Prefer dependency injection and default parameter values.
-
-Why? _This makes it easier to test the classes, but doesn't require Herculean efforts to instantiate classes at runtime:_
-
-```ruby
-class PersonFormatter
-  def format(person)
-    # whatever
-  end
-end
-
-# Option 1 - constructor injection
-class View
-  def initialize(person_formatter=PersonFormatter.new)
-    @person_formatter = person_formatter
-  end
-
-  def render
-    # code
-    puts @person_formatter.format(person)
-    # more code
-  end
-end
-
-# Option 2 - setter injection with a sensible default
-class View
-  attr_writer :person_formatter
-  def initialize(person_formatter)
-    @person_formatter = PersonFormatter.new
-  end
-
-  def render
-    # code
-    puts @person_formatter.format(person)
-    # more code
-  end
-end
-```
-
-#### Don't make methods public unless they are part of the public interface
-
-Why? _Public is the way to formally document the contract of your class.  Putting methods that shouldn't be called by others in the public interface is just lazy, and increases maintenance down the road._
-
-
-#### `protected` is likely not correct; only use it for the template method pattern and even then, would a lambda or proc work better?
-
-Why? _Protected is used to allow subclasses to call non-public methods.  This implies a potentially complex type hierarchy, which is likely not correct for what you are doing._
-
-
-#### Know the `ClassMethods` pattern for sharing class methods via a module
-
-Why? _It's a convienient pattern to add macro-style methods to classes_
-
-```ruby
-module Helper
-  def self.included(k)
-    k.extend ClassMethods
-  end
-  module ClassMethods
-    def strategy(strat)
-      @strategy = strat
-    end
-  end
-end
-
-class UsesHelper
-  include Helper
-
-  strategy :foo
-
-  def doit; puts self.strat; end
-end
-```
-
-#### Do not use ivars as a way of avoiding method parameters.
-
-Why? _Intance variables are a form of global data, and your routines' complexity increases when their input comes from multiple sources.  If the instance variables control flow or logic, pass them in as parameters_
-
-
-#### private methods should be used to make public methods clear; they should avoid reliance on ivars if at-all possible
-
-Why? _Private methods that do not rely on instance variables can very easily be extracted to new classes when things get compledx_
-
-
-#### private methods calling more private methods might indicate a second class is hiding inside this class
-
-
-
-## Documentation
-
-### Classes And Modules
-
-#### Rubydoc all classes with at least the purpose of the class
-
-Why? _Naming is hard; documentation helps explain what a class is for_
-
-
-#### For non-namespaced modules, the Rubydoc should include the names and purpose of all methods that a class is expected to provide when mixing in
-
-Why? _Because we don't have types, the user of your module needs to know what methods to implement to make the module work_
-
-
-#### Summarize the purpose of the class or module as the first line
-
-Why? _This lets someone see, at a glance, what the construct is for_
-
-
-#### Do not start documentation with 'This class' or 'This module'
-
-Why? _We know what kind of thing it is; just state what it does_
-
-
-### General
-
-#### Use RDoc instead of YARD or TomDoc
-
-Why? _RDoc.info does not support TomDoc, and YARD is way too heavyweight_
-
-
-#### Do not surround class or method names in your project with code blocks
-
-Why? _RDoc will link to methods or classes in your project_
-
-
-#### DO surround class or method names from other libraries with code blocks
-
-Why? _This makes it clear that you mean a method name or class, because RDoc cannot link outside of your codebase_
-
-
-#### Reserve inline comments for answering 'Why?' questions
-
-Why? _Don't restate what the code does, but DO explain why it works the way it does, especially if it does something in a suprising or weird way, from a business logic perspective_
-
-```ruby
-## Wrong, don't explain what the code does, we can read it
-def minor?
-  # Check if they are under 19
-  self.age < 19
-end
-
-## Right, explain the odd logic so others know it is intentional, with
-## a ref for more info as to why
-def minor?
-  # For our purposes, an 18-year-old is still a minor.  See
-  # ticket XYZ for a more detailed discussion
-  self.age < 19
-end
-```
-
-### Methods
-
-#### Rubydoc the parameter types and return types
-
-Why? _There's no other way to tell what the types are and it's just not nice to hide this info_
-
-
-#### Document all known keys, their types, and their default values for 'options hash' style params
-
-Why? _Because it's jerky not to; there's no other way to know what they are_
-
-```ruby
-# Makes a request
-#
-# url:: url to request
-# options:: options to control request:
-#           +:method+:: HTTP method to use as a String (default "GET")
-#           +:content_type+:: Mime type to include as a header, as a String (default "text/plain")
-#           +:if_modified_since+:: Date for if-modified-since header, default nil
-def request(url,options={})
-end
-```
-
-#### Document a method's purpose if it's name alone cannot easily communicate it
-
-Why? _Good method names are preferred, but if it's somewhat complex, add a bit more about what the method does_
-
-
-#### Document the meaning of parameter types if their name alone isn't enough to communicate it
-
-Why? _Again, the parameter names should be meaninful, but if they don't full explain things, throws us a bone_
-
-
-#### Do not document default parameter values
-
-Why? _These valuers show up in rdoc, so restating them is just a maintenance issue_
-
-
-#### Document the types of each attribute created with an `attr_` method
-
-Why? _No other way to know what the types are_
-
-
-### Readme
-
-#### There should be a README that includes:
-
-Why? _Because a README is a nice way to explain what your code is/does_
-
-
-#### The README should explain what the library/app does, in one line
-
-Why? _Summarizing things in one line is helpful_
-
-
-#### The README should explain how to install your app/code
-
-Why? _Because not everyone knows what needs to be done, even if it's just `gem install`_
-
-
-#### The README should show the simplest example possible of using the library/ap
-
-Why? _This, along with the description allows someone to understand your library/app in under a minute_
-
-
-#### A more detailed overview, pointing to key classes or modules
-
-Why? _When rendered as RDoc, these classes link to where the user should start reading to get a deeper perspective_
-
-
-#### Additional info for developing with the code
-
-Why? _If you want contributions, developers need to know how to work with your code_
-
-
 ## Files
 
 #### One class/module per file
@@ -385,6 +145,123 @@ result = if something?
          end
 ```
 
+## Naming
+
+### Variables
+
+#### Avoid abbreviations
+
+Why? _Abbreviations can clash, require explanation and generally disrupt the flow of things_
+
+
+#### Avoid one-character names
+
+Why? _No reason not to be descriptive_
+
+
+#### For non 'primitive' types, use the name of the class, or the name of the class plural if a collection, unless there will be multiple instances in scope, then *do not* follow this convention
+
+Why? _When there's no particular specific name for something, using its type makes it easy to remember what the object is_
+
+```ruby
+# Just use the classname
+def routine
+  customer = Customer.find(124)
+  customers = Customer.find_all_by_gender("M")
+end
+
+# Here we have two lists, so neither should just be "customers"
+def other_routine
+  males = Customer.find_all_by_gender("M")
+  minors = Customer.where('age < ?',18)
+end
+```
+
+#### For procs and lambdas, use a verb as opposed to `proc` or something
+
+Why? _Procs and lambdas are more like methods and thus should be verbs, since they do something_
+
+```ruby
+# Wrong, the variable has been needlessly "nounified" for no real benefit
+saver = lambda { |x| x.save! }
+
+# Correct, the variable, being a verb, is instantly recognizable
+#          as a lambda
+save = lambda { |x| x.save! }
+```
+
+### Methods
+
+#### Follow the 'referentially transparent' naming scheme of using `foo` and `foo=` for 'accessors'.
+
+Why? _Since Ruby allows the '=' form, using 'get' or 'set' in the names just adds noise_
+
+
+#### Boolean methods end in a question mark
+
+Why? _This allows methods that can used in expressions to clearly stand out and makes code more fluent_
+
+
+#### Dangerous methods end in a bang.
+
+Why? _This calls out methods whose use should be carefully understood_
+
+```ruby
+# Mutates the object; dangerous on an otherwise immutable object
+def process!
+  @processed = true
+end
+
+# Has a side-effect that is not obvious and might not
+# be idempotent
+def render!(output)
+  queue_event(:some_event)
+  output.puts @content
+end
+
+# Raises an exception on failure, unlike its analog, save, which does not
+def save!
+  raise ValidationException unless self.save
+end
+```
+
+### Classes And Modules
+
+#### For non-Rails apps, namespace all classes in a top-level module named for your app or library
+
+Why? _Prevents naming clases when your code is used with other libraries_
+
+
+#### Class names should be comprehensible without their module namespace.
+
+Why? _Ensures that classnames are understood everywhere used._
+
+```ruby
+# Bad, 'Base' is not an accurate classname
+class ActiveRecord::Base
+end
+
+# Good, using the class witihout its namespaced module doesn't
+# remove any clarity
+class Gateway::BraintreeGateway
+end
+```
+
+#### Class names should be nouns
+
+Why? _Classes represent things, and things are nouns_
+
+
+#### Non-namespace module names should tend toward adjectives, e.g. `Enumerable`
+
+Why? _Modules used as mixins represent a trait or aspect that you want to use to enhance a class.  These are naturally adjectives._
+
+
+#### Namespace module names should tend toward nouns
+
+Why? _Using modules just for namespacing is, again, specifying things, which are nouns_
+
+
 ## General Style
 
 #### Avoid 1.9-style hash syntax
@@ -517,228 +394,244 @@ end
 Why? _Returning a 'truthy' value will lead to unintended consequences, and could lead to complex dependencies in your code.  You don't need the hassle_
 
 
-## Naming
+## Design
 
-### Classes And Modules
-
-#### For non-Rails apps, namespace all classes in a top-level module named for your app or library
-
-Why? _Prevents naming clases when your code is used with other libraries_
+#### Classes should do one thing and one thing only
 
 
-#### Class names should be comprehensible without their module namespace.
 
-Why? _Ensures that classnames are understood everywhere used._
+#### If a class has only one method, consider using a lambda or proc instead
+
+Why? _A class with one method, especially Doer.do, is just a function, so make it a lambda_
+
+
+#### For a base class with abstract methods, include the methods in the base class and have them raise.
+
+Why? _This gives you a single place to document the methods subclasses are expected to implement, and ensures that, at least at runtime, they *are* implemented_
+
+
+#### Avoid instantiating classes inside other classes.  Prefer dependency injection and default parameter values.
+
+Why? _This makes it easier to test the classes, but doesn't require Herculean efforts to instantiate classes at runtime:_
 
 ```ruby
-# Bad, 'Base' is not an accurate classname
-class ActiveRecord::Base
+class PersonFormatter
+  def format(person)
+    # whatever
+  end
 end
 
-# Good, using the class witihout its namespaced module doesn't
-# remove any clarity
-class Gateway::BraintreeGateway
+# Option 1 - constructor injection
+class View
+  def initialize(person_formatter=PersonFormatter.new)
+    @person_formatter = person_formatter
+  end
+
+  def render
+    # code
+    puts @person_formatter.format(person)
+    # more code
+  end
+end
+
+# Option 2 - setter injection with a sensible default
+class View
+  attr_writer :person_formatter
+  def initialize(person_formatter)
+    @person_formatter = PersonFormatter.new
+  end
+
+  def render
+    # code
+    puts @person_formatter.format(person)
+    # more code
+  end
 end
 ```
 
-#### Class names should be nouns
+#### Don't make methods public unless they are part of the public interface
 
-Why? _Classes represent things, and things are nouns_
-
-
-#### Non-namespace module names should tend toward adjectives, e.g. `Enumerable`
-
-Why? _Modules used as mixins represent a trait or aspect that you want to use to enhance a class.  These are naturally adjectives._
+Why? _Public is the way to formally document the contract of your class.  Putting methods that shouldn't be called by others in the public interface is just lazy, and increases maintenance down the road._
 
 
-#### Namespace module names should tend toward nouns
+#### `protected` is likely not correct; only use it for the template method pattern and even then, would a lambda or proc work better?
 
-Why? _Using modules just for namespacing is, again, specifying things, which are nouns_
+Why? _Protected is used to allow subclasses to call non-public methods.  This implies a potentially complex type hierarchy, which is likely not correct for what you are doing._
+
+
+#### Know the `ClassMethods` pattern for sharing class methods via a module
+
+Why? _It's a convienient pattern to add macro-style methods to classes_
+
+```ruby
+module Helper
+  def self.included(k)
+    k.extend ClassMethods
+  end
+  module ClassMethods
+    def strategy(strat)
+      @strategy = strat
+    end
+  end
+end
+
+class UsesHelper
+  include Helper
+
+  strategy :foo
+
+  def doit; puts self.strat; end
+end
+```
+
+#### Do not use ivars as a way of avoiding method parameters.
+
+Why? _Intance variables are a form of global data, and your routines' complexity increases when their input comes from multiple sources.  If the instance variables control flow or logic, pass them in as parameters_
+
+
+#### private methods should be used to make public methods clear; they should avoid reliance on ivars if at-all possible
+
+Why? _Private methods that do not rely on instance variables can very easily be extracted to new classes when things get compledx_
+
+
+#### private methods calling more private methods might indicate a second class is hiding inside this class
+
+
+
+## Documentation
+
+### General
+
+#### Use RDoc instead of YARD or TomDoc
+
+Why? _RDoc.info does not support TomDoc, and YARD is way too heavyweight_
+
+
+#### Do not surround class or method names in your project with code blocks
+
+Why? _RDoc will link to methods or classes in your project_
+
+
+#### DO surround class or method names from other libraries with code blocks
+
+Why? _This makes it clear that you mean a method name or class, because RDoc cannot link outside of your codebase_
+
+
+#### Reserve inline comments for answering 'Why?' questions
+
+Why? _Don't restate what the code does, but DO explain why it works the way it does, especially if it does something in a suprising or weird way, from a business logic perspective_
+
+```ruby
+## Wrong, don't explain what the code does, we can read it
+def minor?
+  # Check if they are under 19
+  self.age < 19
+end
+
+## Right, explain the odd logic so others know it is intentional, with
+## a ref for more info as to why
+def minor?
+  # For our purposes, an 18-year-old is still a minor.  See
+  # ticket XYZ for a more detailed discussion
+  self.age < 19
+end
+```
+
+### Readme
+
+#### There should be a README that includes:
+
+Why? _Because a README is a nice way to explain what your code is/does_
+
+
+#### The README should explain what the library/app does, in one line
+
+Why? _Summarizing things in one line is helpful_
+
+
+#### The README should explain how to install your app/code
+
+Why? _Because not everyone knows what needs to be done, even if it's just `gem install`_
+
+
+#### The README should show the simplest example possible of using the library/ap
+
+Why? _This, along with the description allows someone to understand your library/app in under a minute_
+
+
+#### A more detailed overview, pointing to key classes or modules
+
+Why? _When rendered as RDoc, these classes link to where the user should start reading to get a deeper perspective_
+
+
+#### Additional info for developing with the code
+
+Why? _If you want contributions, developers need to know how to work with your code_
 
 
 ### Methods
 
-#### Follow the 'referentially transparent' naming scheme of using `foo` and `foo=` for 'accessors'.
+#### Rubydoc the parameter types and return types
 
-Why? _Since Ruby allows the '=' form, using 'get' or 'set' in the names just adds noise_
-
-
-#### Boolean methods end in a question mark
-
-Why? _This allows methods that can used in expressions to clearly stand out and makes code more fluent_
+Why? _There's no other way to tell what the types are and it's just not nice to hide this info_
 
 
-#### Dangerous methods end in a bang.
+#### Document all known keys, their types, and their default values for 'options hash' style params
 
-Why? _This calls out methods whose use should be carefully understood_
+Why? _Because it's jerky not to; there's no other way to know what they are_
 
 ```ruby
-# Mutates the object; dangerous on an otherwise immutable object
-def process!
-  @processed = true
-end
-
-# Has a side-effect that is not obvious and might not
-# be idempotent
-def render!(output)
-  queue_event(:some_event)
-  output.puts @content
-end
-
-# Raises an exception on failure, unlike its analog, save, which does not
-def save!
-  raise ValidationException unless self.save
+# Makes a request
+#
+# url:: url to request
+# options:: options to control request:
+#           +:method+:: HTTP method to use as a String (default "GET")
+#           +:content_type+:: Mime type to include as a header, as a String (default "text/plain")
+#           +:if_modified_since+:: Date for if-modified-since header, default nil
+def request(url,options={})
 end
 ```
 
-### Variables
+#### Document a method's purpose if it's name alone cannot easily communicate it
 
-#### Avoid abbreviations
-
-Why? _Abbreviations can clash, require explanation and generally disrupt the flow of things_
+Why? _Good method names are preferred, but if it's somewhat complex, add a bit more about what the method does_
 
 
-#### Avoid one-character names
+#### Document the meaning of parameter types if their name alone isn't enough to communicate it
 
-Why? _No reason not to be descriptive_
-
-
-#### For non 'primitive' types, use the name of the class, or the name of the class plural if a collection, unless there will be multiple instances in scope, then *do not* follow this convention
-
-Why? _When there's no particular specific name for something, using its type makes it easy to remember what the object is_
-
-```ruby
-# Just use the classname
-def routine
-  customer = Customer.find(124)
-  customers = Customer.find_all_by_gender("M")
-end
-
-# Here we have two lists, so neither should just be "customers"
-def other_routine
-  males = Customer.find_all_by_gender("M")
-  minors = Customer.where('age < ?',18)
-end
-```
-
-#### For procs and lambdas, use a verb as opposed to `proc` or something
-
-Why? _Procs and lambdas are more like methods and thus should be verbs, since they do something_
-
-```ruby
-# Wrong, the variable has been needlessly "nounified" for no real benefit
-saver = lambda { |x| x.save! }
-
-# Correct, the variable, being a verb, is instantly recognizable
-#          as a lambda
-save = lambda { |x| x.save! }
-```
-
-## Rails
-
-### Active Record
-
-#### Do not use hooks
-
-Why? _Hooks make your models very hard to use in different ways, and lock them to business rules that are likely not all that hard and fast.  They also make testing very difficult, as it becomes harder and harder to set up the correct state using objects that have excessive hooks on them._
-
-```ruby
-# Wrong, we've hidden business logic behind a simple CRUD operation
-class Person < ActiveRecord::Base
-  after_save :update_facebook
-
-private
-
-  def update_facebook
-    # send Facebook some status update 
-  end
-end
-
-# Better, we have a method that says what it does
-class Person < ActiveRecord::Base
-
-  def save_and_update_facebook
-    if save
-      # Send Facebook some status update
-    end
-  end
-end
-```
-
-#### Validations should not be conditional
-
-Why? _Validations that are not always applicable make it very hard to modify objects and enhance them, because it becomes increasingly difficult tor understand what a valid objects really is.  Further, it becomes very difficult to set up objects in a particular state for a given test if there are a lot of conditonal validations_
+Why? _Again, the parameter names should be meaninful, but if they don't full explain things, throws us a bone_
 
 
-#### Use database constraints to enforce valid data in the database
+#### Do not document default parameter values
 
-Why? _The database is the only place that can truly ensure various constraints, such as uniqueness.  Constraints are incredibly useful for making sure that, regardless of bugs in your code, your data will be clean._
-
-
-#### AR objects should be as dumb as possible; only derived values should be new methods
-
-Why? _It may be tempting to add business logic to your models.  This instanvce violates the single responsiblity principal, but it also makes the classes harder and harder to understand, test, and modify.  Treat your modesl as dumb structs with persistence, and put all other concerns on other classes.  Do not just mix in a bunch of modules._
+Why? _These valuers show up in rdoc, so restating them is just a maintenance issue_
 
 
-### Controllers
+#### Document the types of each attribute created with an `attr_` method
 
-#### There should be very few `if` statements; controllers should be as dumb as possible
-
-Why? _`if` statements usually imply business logic, which does not belong in controllers.  The logic in the controller should be mainly concerned with send the correct response to the user._
+Why? _No other way to know what the types are_
 
 
-#### Avoid excessive filters, or filters that are highly conditional
+### Classes And Modules
 
-Why? _When the number of filters increases, it becomes harder and harder to know what code is executing and in what order.  Further, when filters set instance variables, it becomes increasingly difficult to understand where those variables are being set, and the filters become very order-specific.  Finally, conditional filters, or filters used on only one controller method increase complexity beyond the point of utility_
+#### Rubydoc all classes with at least the purpose of the class
+
+Why? _Naming is hard; documentation helps explain what a class is for_
 
 
-#### `rake routes` should be the truth, the whole truth, and nothing but the truth
+#### For non-namespaced modules, the Rubydoc should include the names and purpose of all methods that a class is expected to provide when mixing in
 
-Why? _By lazily creating all routes for a resource, when you only need a few to be valid, you create misleading output for newcomers, and allow valid named route methods to be created that can only fail at runtime or in production._
+Why? _Because we don't have types, the user of your module needs to know what methods to implement to make the module work_
 
-```ruby
-# Wrong, our app only supports create and show
-resources :transactions
 
-# Right, rake routes reflects the reality of our app now
-resources :transactions, :only => [:create, :show]
-```
+#### Summarize the purpose of the class or module as the first line
 
-#### Prefer exposing the exact objects views require rather than 'root' objects requiring deep traveral
+Why? _This lets someone see, at a glance, what the construct is for_
 
-Why? _When views navigate deep into object hierarchies, it becomes very difficult to understand what data the views really *do* require, and it makes refactoring anything in those object hierarchies incredibly difficult_
 
-```ruby
-# A view for a person's credit cards requires the person's name, and a list of last-4, type, and expiration date of cards
+#### Do not start documentation with 'This class' or 'This module'
 
-# Wrong, the view must navigate through the person to get his credit cards and has
-# access to the entire person objects, which is not needed
-def show
-  @person = Person.find(params[:person_id])
-end
-
-# Wrong, although the view can now access credit cards directly, it's still not clear what data
-# is really needed by the view
-def show
-  @person = Person.find(params[:person_id])
-  @credit_cards = @person.credit_cards
-end
-
-# Right, the ivars represent what the view needs AND contain only what the view needs.
-# You may wish to use a more sophisticated "presenter" pattern instead of OpenStruct
-def show
-  @person_name = Person.find(params[:person_id].full_name
-  @credit_cards = @person.credit_cards.map { |card|
-    OpenStruct.new(:last_four => card.last_four, 
-                   :card_type => card.card_type,
-                   :expiration_date => [card.expiration_month,card.expiration_year].join('/'))
-  }
-end
-```
-
-#### Do not create ivars unless they are to be shared with the views.
-
-Why? _Using instance variables to avoid passing parameters is lazy and creates complex and hard-to-understand code.  In a controller, instance variables are special: they represent the data passed to the views, and that's all they should be used for._
+Why? _We know what kind of thing it is; just state what it does_
 
 
 ## Testing
@@ -850,5 +743,112 @@ Why? _`raise` will mark your test as erroneous, not failed, as that is the case 
 #### Avoid fixtures, factories, or other globally-shared setup data.
 
 Why? _As an app matures, the fixtures or factories become incredibly brittle and hard to modify or understand.  It also places key elements of your test setup far away from the test itself, making it hard to understand any given test._
+
+
+## Rails
+
+### Controllers
+
+#### There should be very few `if` statements; controllers should be as dumb as possible
+
+Why? _`if` statements usually imply business logic, which does not belong in controllers.  The logic in the controller should be mainly concerned with send the correct response to the user._
+
+
+#### Avoid excessive filters, or filters that are highly conditional
+
+Why? _When the number of filters increases, it becomes harder and harder to know what code is executing and in what order.  Further, when filters set instance variables, it becomes increasingly difficult to understand where those variables are being set, and the filters become very order-specific.  Finally, conditional filters, or filters used on only one controller method increase complexity beyond the point of utility_
+
+
+#### `rake routes` should be the truth, the whole truth, and nothing but the truth
+
+Why? _By lazily creating all routes for a resource, when you only need a few to be valid, you create misleading output for newcomers, and allow valid named route methods to be created that can only fail at runtime or in production._
+
+```ruby
+# Wrong, our app only supports create and show
+resources :transactions
+
+# Right, rake routes reflects the reality of our app now
+resources :transactions, :only => [:create, :show]
+```
+
+#### Prefer exposing the exact objects views require rather than 'root' objects requiring deep traveral
+
+Why? _When views navigate deep into object hierarchies, it becomes very difficult to understand what data the views really *do* require, and it makes refactoring anything in those object hierarchies incredibly difficult_
+
+```ruby
+# A view for a person's credit cards requires the person's name, and a list of last-4, type, and expiration date of cards
+
+# Wrong, the view must navigate through the person to get his credit cards and has
+# access to the entire person objects, which is not needed
+def show
+  @person = Person.find(params[:person_id])
+end
+
+# Wrong, although the view can now access credit cards directly, it's still not clear what data
+# is really needed by the view
+def show
+  @person = Person.find(params[:person_id])
+  @credit_cards = @person.credit_cards
+end
+
+# Right, the ivars represent what the view needs AND contain only what the view needs.
+# You may wish to use a more sophisticated "presenter" pattern instead of OpenStruct
+def show
+  @person_name = Person.find(params[:person_id].full_name
+  @credit_cards = @person.credit_cards.map { |card|
+    OpenStruct.new(:last_four => card.last_four, 
+                   :card_type => card.card_type,
+                   :expiration_date => [card.expiration_month,card.expiration_year].join('/'))
+  }
+end
+```
+
+#### Do not create ivars unless they are to be shared with the views.
+
+Why? _Using instance variables to avoid passing parameters is lazy and creates complex and hard-to-understand code.  In a controller, instance variables are special: they represent the data passed to the views, and that's all they should be used for._
+
+
+### Active Record
+
+#### Do not use hooks
+
+Why? _Hooks make your models very hard to use in different ways, and lock them to business rules that are likely not all that hard and fast.  They also make testing very difficult, as it becomes harder and harder to set up the correct state using objects that have excessive hooks on them._
+
+```ruby
+# Wrong, we've hidden business logic behind a simple CRUD operation
+class Person < ActiveRecord::Base
+  after_save :update_facebook
+
+private
+
+  def update_facebook
+    # send Facebook some status update 
+  end
+end
+
+# Better, we have a method that says what it does
+class Person < ActiveRecord::Base
+
+  def save_and_update_facebook
+    if save
+      # Send Facebook some status update
+    end
+  end
+end
+```
+
+#### Validations should not be conditional
+
+Why? _Validations that are not always applicable make it very hard to modify objects and enhance them, because it becomes increasingly difficult tor understand what a valid objects really is.  Further, it becomes very difficult to set up objects in a particular state for a given test if there are a lot of conditonal validations_
+
+
+#### Use database constraints to enforce valid data in the database
+
+Why? _The database is the only place that can truly ensure various constraints, such as uniqueness.  Constraints are incredibly useful for making sure that, regardless of bugs in your code, your data will be clean._
+
+
+#### AR objects should be as dumb as possible; only derived values should be new methods
+
+Why? _It may be tempting to add business logic to your models.  This instanvce violates the single responsiblity principal, but it also makes the classes harder and harder to understand, test, and modify.  Treat your modesl as dumb structs with persistence, and put all other concerns on other classes.  Do not just mix in a bunch of modules._
 
 
