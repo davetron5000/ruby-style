@@ -54,6 +54,11 @@ Why? _Single-line methods are harder to change when the method needs an addition
 Why? _Excessively long lines can be very difficult to read and understand; a low line length encourages keeping things simple_
 
 
+#### Literal arrays or hashes should have a comma after *every* element, includingn the last one
+
+Why? _This makes it easier to add elements and reorder elements without having to worry about missing commas_
+
+
 #### For 'options-hash' calls, align keys across multiple lines, one per line, e.g.
 
 Why? _This makes it easier to read and modify the options sent to the method_
@@ -69,10 +74,10 @@ some_call(non_option1,non_option2,:foo => "bar",
 Why? _This makes it easier to add new attributres without creating complex diffs.  It also affords documenting what the attributes represent_
 
 ```ruby
-# wrong, hard to modify
+# Wrong; hard to modify
 attr_accessor :first_name, :last_name, :gender
 
-# correct, we can easily modify and document
+# Right; we can easily modify and document
 attr_accessor :first_name
 attr_accessor :last_name
 attr_accessor :gender
@@ -175,6 +180,15 @@ def other_routine
   males = Customer.find_all_by_gender("M")
   minors = Customer.where('age < ?',18)
 end
+
+# Here we a very long method that, even though it should be refactored,
+# isn't, so we use a more verbose variable name to keep things clear 50 lines in.
+def other_routine
+  # tons of code
+  male_customers = Customer.find_all_by_gender("M")
+  minor_customers = Customer.where('age < ?',18)
+  # tons more code
+end
 ```
 
 #### For procs and lambdas, use a verb as opposed to `proc` or something
@@ -182,11 +196,10 @@ end
 Why? _Procs and lambdas are more like methods and thus should be verbs, since they do something_
 
 ```ruby
-# Wrong, the variable has been needlessly "nounified" for no real benefit
+# Wrong; the variable has been needlessly "nounified" for no real benefit
 saver = lambda { |x| x.save! }
 
-# Correct, the variable, being a verb, is instantly recognizable
-#          as a lambda
+# Correct; the variable, being a verb, is instantly recognizable as an action
 save = lambda { |x| x.save! }
 ```
 
@@ -237,11 +250,11 @@ Why? _Prevents naming clases when your code is used with other libraries_
 Why? _Ensures that classnames are understood everywhere used._
 
 ```ruby
-# Bad, 'Base' is not an accurate classname
+# Wrong; 'Base' is not an accurate classname
 class ActiveRecord::Base
 end
 
-# Good, using the class witihout its namespaced module doesn't
+# Good; using the class witihout its namespaced module doesn't
 # remove any clarity
 class Gateway::BraintreeGateway
 end
@@ -279,14 +292,14 @@ Why? _Many shops are still on 1.8, and many systems have 1.8 as the default, so 
 Why? _This visually sets them off, and makes for a cleaner chaning syntax_
 
 ```ruby
-# Wrong, calling a method on 'end' is awkward looking
+# Wrong; calling a method on 'end' is awkward looking
 male_teens = Customers.all.select do |customer|
   customer.gender == :male 
 end.reject do |man|
   man.age > 19 || man.age < 13
 end
 
-# Right, the chaining and use of the comprehensions is clear
+# Right; the chaining and use of the comprehensions is clear
 male_teens = Customers.all.select { |customer|
   customer.gender == :male 
 }.reject { |man|
@@ -314,17 +327,17 @@ Why? _the expression becomes too difficult to unwind, just use an `if`_
 Why? _`unless` is like putting a giant `!()` around your expression, so it becomes harder and harder to understand what is being tested by adding this.  It's not worth it_
 
 ```ruby
-# Wrong, too hard to figure out
+# Wrong; too hard to figure out
 unless person.valid? && !person.from('US')
   # doit
 end
 
-# Right, DeMorgan's law simplified this
+# Right; DeMorgan's law simplified this
 if !person.valid? || person.from('US')
   # doit
 end
 
-# Better, use a method
+# Better; use a method
 unless valid_and_foreign?(person)
   # doit
 end
@@ -335,10 +348,10 @@ end
 Why? _Code can become hard to read when conditions are trailing and complex.  Early-exit conditions are generally simple and can benefit from this form_
 
 ```ruby
-# Wrong, too complex
+# Wrong; too complex
 person.save unless person.from('US') || person.age > 18
 
-# OK, an early exit
+# OK; an early exit
 raise "person may not be nil" if person.nil?
 ```
 
@@ -360,7 +373,7 @@ def eligible_person(name)
   person
 end
 
-# Correct
+# Right
 def eligible_person(name)
   Person.create(:name => name).tap { |person|
     person.update_eligibility(true)
@@ -379,11 +392,12 @@ Why? _The braces syntax encourages clean chaning, and with simple blocks, you ca
 Why? _It's a lot clearer when you state exactly what you are testing; this makes it easier to change the code later, and avoids sticky issues like 0 and the empty string being truthy_
 
 ```ruby
-# Wrong, intent is masked
+# Wrong; intent is masked
 if person.name
   # do it
 end
-# Right, we can see just what we're testing
+
+# Right; we can see just what we're testing
 if person.name.present?
   # do it
 end
@@ -522,13 +536,13 @@ Why? _This makes it clear that you mean a method name or class, because RDoc can
 Why? _Don't restate what the code does, but DO explain why it works the way it does, especially if it does something in a suprising or weird way, from a business logic perspective_
 
 ```ruby
-## Wrong, don't explain what the code does, we can read it
+## Wrong; don't explain what the code does, we can read it
 def minor?
   # Check if they are under 19
   self.age < 19
 end
 
-## Right, explain the odd logic so others know it is intentional, with
+## Right; explain the odd logic so others know it is intentional, with
 ## a ref for more info as to why
 def minor?
   # For our purposes, an 18-year-old is still a minor.  See
@@ -764,10 +778,10 @@ Why? _When the number of filters increases, it becomes harder and harder to know
 Why? _By lazily creating all routes for a resource, when you only need a few to be valid, you create misleading output for newcomers, and allow valid named route methods to be created that can only fail at runtime or in production._
 
 ```ruby
-# Wrong, our app only supports create and show
+# Wrong; our app only supports create and show
 resources :transactions
 
-# Right, rake routes reflects the reality of our app now
+# Right; rake routes reflects the reality of our app now
 resources :transactions, :only => [:create, :show]
 ```
 
@@ -778,20 +792,20 @@ Why? _When views navigate deep into object hierarchies, it becomes very difficul
 ```ruby
 # A view for a person's credit cards requires the person's name, and a list of last-4, type, and expiration date of cards
 
-# Wrong, the view must navigate through the person to get his credit cards and has
+# Wrong; the view must navigate through the person to get his credit cards and has
 # access to the entire person objects, which is not needed
 def show
   @person = Person.find(params[:person_id])
 end
 
-# Wrong, although the view can now access credit cards directly, it's still not clear what data
+# Wrong; although the view can now access credit cards directly, it's still not clear what data
 # is really needed by the view
 def show
   @person = Person.find(params[:person_id])
   @credit_cards = @person.credit_cards
 end
 
-# Right, the ivars represent what the view needs AND contain only what the view needs.
+# Right; the ivars represent what the view needs AND contain only what the view needs.
 # You may wish to use a more sophisticated "presenter" pattern instead of OpenStruct
 def show
   @person_name = Person.find(params[:person_id].full_name
@@ -815,7 +829,7 @@ Why? _Using instance variables to avoid passing parameters is lazy and creates c
 Why? _Hooks make your models very hard to use in different ways, and lock them to business rules that are likely not all that hard and fast.  They also make testing very difficult, as it becomes harder and harder to set up the correct state using objects that have excessive hooks on them._
 
 ```ruby
-# Wrong, we've hidden business logic behind a simple CRUD operation
+# Wrong; we've hidden business logic behind a simple CRUD operation
 class Person < ActiveRecord::Base
   after_save :update_facebook
 
@@ -826,7 +840,7 @@ private
   end
 end
 
-# Better, we have a method that says what it does
+# Better; we have a method that says what it does
 class Person < ActiveRecord::Base
 
   def save_and_update_facebook
