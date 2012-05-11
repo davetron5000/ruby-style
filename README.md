@@ -181,7 +181,7 @@ def other_routine
   minors = Customer.where('age < ?',18)
 end
 
-# Here we a very long method that, even though it should be refactored,
+# Here we have a very long method that, even though it should be refactored,
 # isn't, so we use a more verbose variable name to keep things clear 50 lines in.
 def other_routine
   # tons of code
@@ -191,7 +191,7 @@ def other_routine
 end
 ```
 
-#### For procs and lambdas, use a verb as opposed to `proc` or something
+#### For procs and lambdas, use a verb as opposed to `foo_proc` or `foo_block`
 
 Why? _Procs and lambdas are more like methods and thus should be verbs, since they do something_
 
@@ -225,8 +225,7 @@ def process!
   @processed = true
 end
 
-# Has a side-effect that is not obvious and might not
-# be idempotent
+# Has a side-effect that is not obvious and might not be idempotent
 def render!(output)
   queue_event(:some_event)
   output.puts @content
@@ -242,7 +241,7 @@ end
 
 #### For non-Rails apps, namespace all classes in a top-level module named for your app or library
 
-Why? _Prevents naming clases when your code is used with other libraries_
+Why? _Prevents naming clashes when your code is used with other libraries_
 
 
 #### Class names should be comprehensible without their module namespace.
@@ -254,8 +253,7 @@ Why? _Ensures that classnames are understood everywhere used._
 class ActiveRecord::Base
 end
 
-# Good; using the class witihout its namespaced module doesn't
-# remove any clarity
+# Good; using the class without its namespaced module doesn't remove any clarity
 class Gateway::BraintreeGateway
 end
 ```
@@ -316,6 +314,24 @@ Why? _These blocks are more control-structures, so `do..end` is more natural.  I
 
 Why? _Parens visually set off the parameters, and reduce confusion about how Ruby will parse the line, making the code easier to maintain_
 
+```ruby
+# Given this code
+class Person
+  def self.create(name,status)
+    # ..
+  end
+end
+Person.create 'Dave', :single
+# and we change it so that :status is based on a condition
+
+# Wrong; what does this line do?
+Person.create 'Dave', wife || :single
+
+# If we used parens from the get go, it's a no brainer
+Person.create('Dave',:single)
+# Right; code is clear
+Person.create('Dave',wife || :single)
+```
 
 #### Do not use `else` with an `unless`
 
@@ -421,7 +437,7 @@ Why? _A class with one method, especially Doer.do, is just a function, so make i
 
 #### For a base class with abstract methods, include the methods in the base class and have them raise.
 
-Why? _This gives you a single place to document the methods subclasses are expected to implement, and ensures that, at least at runtime, they *are* implemented_
+Why? _This gives you a single place to document which methods subclasses are expected to implement, and ensures that, at least at runtime, they **are** implemented_
 
 
 #### Avoid instantiating classes inside other classes.  Prefer dependency injection and default parameter values.
@@ -435,7 +451,17 @@ class PersonFormatter
   end
 end
 
-# Option 1 - constructor injection
+# Wrong; we are tightly coupled to an implementation and have to use
+# crazy mocks to fake this out
+class View
+  def render
+    # code
+    puts PersonFormatter.new.format(person)
+    # more code
+  end
+
+
+# Correct; Option 1 - constructor injection
 class View
   def initialize(person_formatter=PersonFormatter.new)
     @person_formatter = person_formatter
@@ -448,7 +474,7 @@ class View
   end
 end
 
-# Option 2 - setter injection with a sensible default
+# Correct; Option 2 - setter injection with a sensible default
 class View
   attr_writer :person_formatter
   def initialize(person_formatter)
@@ -475,7 +501,7 @@ Why? _Protected is used to allow subclasses to call non-public methods.  This im
 
 #### Know the `ClassMethods` pattern for sharing class methods via a module
 
-Why? _It's a convienient pattern to add macro-style methods to classes_
+Why? _It's a convienient pattern to add macro-style methods to classes, and is used in Rails source, so will be easily recognizable by others_
 
 ```ruby
 module Helper
@@ -500,7 +526,7 @@ end
 
 #### Do not use ivars as a way of avoiding method parameters.
 
-Why? _Intance variables are a form of global data, and your routines' complexity increases when their input comes from multiple sources.  If the instance variables control flow or logic, pass them in as parameters_
+Why? _Instance variables are a form of global data, and your routines' complexity increases when their input comes from multiple sources.  If the instance variables control flow or logic, pass them in as parameters_
 
 
 #### private methods should be used to make public methods clear; they should avoid reliance on ivars if at-all possible
