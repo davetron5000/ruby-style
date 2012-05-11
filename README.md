@@ -1,108 +1,3 @@
-## Active Record
-
-#### Do not use hooks
-
-Why? _Hooks make your models very hard to use in different ways, and lock them to business rules that are likely not all that hard and fast.  They also make testing very difficult, as it becomes harder and harder to set up the correct state using objects that have excessive hooks on them._
-
-```ruby
-# Wrong, we've hidden business logic behind a simple CRUD operation
-class Person < ActiveRecord::Base
-  after_save :update_facebook
-
-private
-
-  def update_facebook
-    # send Facebook some status update 
-  end
-end
-
-# Better, we have a method that says what it does
-class Person < ActiveRecord::Base
-
-  def save_and_update_facebook
-    if save
-      # Send Facebook some status update
-    end
-  end
-end
-```
-
-#### Validations should not be conditional
-
-Why? _Validations that are not always applicable make it very hard to modify objects and enhance them, because it becomes increasingly difficult tor understand what a valid objects really is.  Further, it becomes very difficult to set up objects in a particular state for a given test if there are a lot of conditonal validations_
-
-
-#### Use database constraints to enforce valid data in the database
-
-Why? _The database is the only place that can truly ensure various constraints, such as uniqueness.  Constraints are incredibly useful for making sure that, regardless of bugs in your code, your data will be clean._
-
-
-#### AR objects should be as dumb as possible; only derived values should be new methods
-
-Why? _It may be tempting to add business logic to your models.  This instanvce violates the single responsiblity principal, but it also makes the classes harder and harder to understand, test, and modify.  Treat your modesl as dumb structs with persistence, and put all other concerns on other classes.  Do not just mix in a bunch of modules._
-
-
-## Controllers
-
-#### There should be very few `if` statements; controllers should be as dumb as possible
-
-Why? _`if` statements usually imply business logic, which does not belong in controllers.  The logic in the controller should be mainly concerned with send the correct response to the user._
-
-
-#### Avoid excessive filters, or filters that are highly conditional
-
-Why? _When the number of filters increases, it becomes harder and harder to know what code is executing and in what order.  Further, when filters set instance variables, it becomes increasingly difficult to understand where those variables are being set, and the filters become very order-specific.  Finally, conditional filters, or filters used on only one controller method increase complexity beyond the point of utility_
-
-
-#### `rake routes` should be the truth, the whole truth, and nothing but the truth
-
-Why? _By lazily creating all routes for a resource, when you only need a few to be valid, you create misleading output for newcomers, and allow valid named route methods to be created that can only fail at runtime or in production._
-
-```ruby
-# Wrong, our app only supports create and show
-resources :transactions
-
-# Right, rake routes reflects the reality of our app now
-resources :transactions, :only => [:create, :show]
-```
-
-#### Prefer exposing the exact objects views require rather than 'root' objects requiring deep traveral
-
-Why? _When views navigate deep into object hierarchies, it becomes very difficult to understand what data the views really *do* require, and it makes refactoring anything in those object hierarchies incredibly difficult_
-
-```ruby
-# A view for a person's credit cards requires the person's name, and a list of last-4, type, and expiration date of cards
-
-# Wrong, the view must navigate through the person to get his credit cards and has
-# access to the entire person objects, which is not needed
-def show
-  @person = Person.find(params[:person_id])
-end
-
-# Wrong, although the view can now access credit cards directly, it's still not clear what data
-# is really needed by the view
-def show
-  @person = Person.find(params[:person_id])
-  @credit_cards = @person.credit_cards
-end
-
-# Right, the ivars represent what the view needs AND contain only what the view needs.
-# You may wish to use a more sophisticated "presenter" pattern instead of OpenStruct
-def show
-  @person_name = Person.find(params[:person_id].full_name
-  @credit_cards = @person.credit_cards.map { |card|
-    OpenStruct.new(:last_four => card.last_four, 
-                   :card_type => card.card_type,
-                   :expiration_date => [card.expiration_month,card.expiration_year].join('/'))
-  }
-end
-```
-
-#### Do not create ivars unless they are to be shared with the views.
-
-Why? _Using instance variables to avoid passing parameters is lazy and creates complex and hard-to-understand code.  In a controller, instance variables are special: they represent the data passed to the views, and that's all they should be used for._
-
-
 ## Design
 
 #### Classes should do one thing and one thing only
@@ -738,6 +633,113 @@ saver = lambda { |x| x.save! }
 #          as a lambda
 save = lambda { |x| x.save! }
 ```
+
+## Rails
+
+### Active Record
+
+#### Do not use hooks
+
+Why? _Hooks make your models very hard to use in different ways, and lock them to business rules that are likely not all that hard and fast.  They also make testing very difficult, as it becomes harder and harder to set up the correct state using objects that have excessive hooks on them._
+
+```ruby
+# Wrong, we've hidden business logic behind a simple CRUD operation
+class Person < ActiveRecord::Base
+  after_save :update_facebook
+
+private
+
+  def update_facebook
+    # send Facebook some status update 
+  end
+end
+
+# Better, we have a method that says what it does
+class Person < ActiveRecord::Base
+
+  def save_and_update_facebook
+    if save
+      # Send Facebook some status update
+    end
+  end
+end
+```
+
+#### Validations should not be conditional
+
+Why? _Validations that are not always applicable make it very hard to modify objects and enhance them, because it becomes increasingly difficult tor understand what a valid objects really is.  Further, it becomes very difficult to set up objects in a particular state for a given test if there are a lot of conditonal validations_
+
+
+#### Use database constraints to enforce valid data in the database
+
+Why? _The database is the only place that can truly ensure various constraints, such as uniqueness.  Constraints are incredibly useful for making sure that, regardless of bugs in your code, your data will be clean._
+
+
+#### AR objects should be as dumb as possible; only derived values should be new methods
+
+Why? _It may be tempting to add business logic to your models.  This instanvce violates the single responsiblity principal, but it also makes the classes harder and harder to understand, test, and modify.  Treat your modesl as dumb structs with persistence, and put all other concerns on other classes.  Do not just mix in a bunch of modules._
+
+
+### Controllers
+
+#### There should be very few `if` statements; controllers should be as dumb as possible
+
+Why? _`if` statements usually imply business logic, which does not belong in controllers.  The logic in the controller should be mainly concerned with send the correct response to the user._
+
+
+#### Avoid excessive filters, or filters that are highly conditional
+
+Why? _When the number of filters increases, it becomes harder and harder to know what code is executing and in what order.  Further, when filters set instance variables, it becomes increasingly difficult to understand where those variables are being set, and the filters become very order-specific.  Finally, conditional filters, or filters used on only one controller method increase complexity beyond the point of utility_
+
+
+#### `rake routes` should be the truth, the whole truth, and nothing but the truth
+
+Why? _By lazily creating all routes for a resource, when you only need a few to be valid, you create misleading output for newcomers, and allow valid named route methods to be created that can only fail at runtime or in production._
+
+```ruby
+# Wrong, our app only supports create and show
+resources :transactions
+
+# Right, rake routes reflects the reality of our app now
+resources :transactions, :only => [:create, :show]
+```
+
+#### Prefer exposing the exact objects views require rather than 'root' objects requiring deep traveral
+
+Why? _When views navigate deep into object hierarchies, it becomes very difficult to understand what data the views really *do* require, and it makes refactoring anything in those object hierarchies incredibly difficult_
+
+```ruby
+# A view for a person's credit cards requires the person's name, and a list of last-4, type, and expiration date of cards
+
+# Wrong, the view must navigate through the person to get his credit cards and has
+# access to the entire person objects, which is not needed
+def show
+  @person = Person.find(params[:person_id])
+end
+
+# Wrong, although the view can now access credit cards directly, it's still not clear what data
+# is really needed by the view
+def show
+  @person = Person.find(params[:person_id])
+  @credit_cards = @person.credit_cards
+end
+
+# Right, the ivars represent what the view needs AND contain only what the view needs.
+# You may wish to use a more sophisticated "presenter" pattern instead of OpenStruct
+def show
+  @person_name = Person.find(params[:person_id].full_name
+  @credit_cards = @person.credit_cards.map { |card|
+    OpenStruct.new(:last_four => card.last_four, 
+                   :card_type => card.card_type,
+                   :expiration_date => [card.expiration_month,card.expiration_year].join('/'))
+  }
+end
+```
+
+#### Do not create ivars unless they are to be shared with the views.
+
+Why? _Using instance variables to avoid passing parameters is lazy and creates complex and hard-to-understand code.  In a controller, instance variables are special: they represent the data passed to the views, and that's all they should be used for._
+
 
 ## Testing
 
