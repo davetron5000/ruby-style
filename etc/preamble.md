@@ -1,7 +1,6 @@
 # Ruby Style Guide
 
-#### These rules should be broken if it increase code clarity or maintainability
+#### These rules may be broken if it increases code clarity or maintainability
 
-#### First and foremost, use the style of the code you are modifying
-
+#### Always default to using the style of the code you are modifying
 

@@ -1,6 +1,6 @@
 # Style Guide
 
-This is my style guide.  There are many like it, but this one is mine.o
+This is my style guide.  There are many like it, but this one is mine.
 
 If you like the guide in principle, but disagree with some of the rules, I really don't want to know about it, but you should feel free to tweak it for you or your team. To do that:
 
@@ -13,7 +13,7 @@ If you like the guide in principle, but disagree with some of the rules, I reall
 
 That's it!
 
-It reads from the files in `guide` and `etc` to generate the guide.  Any `.yml` or `.yaml` file in `guide` will get picked up.  The orderingn will be somewhat random, so the file `etc/order.yaml` is used to control the order in which files are rendered.
+It reads from the files in `guide` and `etc` to generate the guide.  Any `.yml` or `.yaml` file in `guide` will get picked up.  The ordering will be somewhat random, so the file `etc/order.yaml` is used to control the order in which files are rendered.
 It should be pretty obvious what the format is.
 
 So, you can easily add your own, tweak what's there, etc.
@@ -62,3 +62,12 @@ Here are three rules.  The first has only a rule, the second adds a "why" and th
                                          (default: bin/../etc/preamble.md)
 
 This pretty much covers it; you can generate files from other directories, customize the order file, omit the "Why", and make your own preamble.
+
+### Tool Tweaks
+
+While I don't want to incorporate your particular style, I very much *do* what to incorporate any bugfixes or features to the tool itself.  It's pretty hard-coded to Markdown and a particular way of doing things that I think looks decent on Github, but
+feel free to make all that better or more flexible!
+
+    $ rake features
+
+will guide the way
