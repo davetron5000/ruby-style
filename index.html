@@ -1,0 +1,942 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>davetron5000's Ruby Style Guide by davetron5000</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>davetron5000's Ruby Style Guide</h1>
+        <p>My Personal Ruby Style Guide</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/davetron5000/ruby-style" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/davetron5000/ruby-style/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/davetron5000/ruby-style/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1>davetron5000's Ruby Style Guide</h1>
+
+<h4>These rules should be broken if it increases code clarity or maintainability</h4>
+
+<h4>First and foremost, use the style of the code you are modifying</h4>
+
+<h2>Files</h2>
+
+<h4>One class/module per file</h4>
+
+<p>Why? <em>Makes it simpler to locate and organize code</em></p>
+
+<h4>Follow Rails conventions in Rails apps</h4>
+
+<h4>For non-Rails apps, code goes in <code>lib</code>, stdlib extensions go in <code>ext</code>
+</h4>
+
+<p>Why? <em>This is where most Rubyists will expect it, and clearly delineates _your app</em> from lib extensions_</p>
+
+<h4>Code for a class/module goes in the lower-cased, snake-cased named file, in a directory structure that matches the module namespaces.  For example, the class <code>Foo::Bar::Baz</code> should be in <code>foo/bar/baz.rb</code>, relative to <code>lib</code> or <code>ext</code>
+</h4>
+
+<p>Why? <em>Makes it simpler to locate the code for a given class</em></p>
+
+<h4>
+<code>Test::Unit</code> files should go in <code>test</code> and be named <code>class_test.rb</code>, e.g. to test the class <code>Foo</code>, create <code>test/foo_test.rb</code>.</h4>
+
+<p>Why? <em>Test dir is then sorted by classname, making it easy to visually scan or auto-complete test names</em></p>
+
+<h4>Nest test classes to match modules if you have a large library with a lot of different namespaces</h4>
+
+<h4>Follow RSpec and Cucumber file/dir naming conventions</h4>
+
+<h2>Formatting</h2>
+
+<h4>2-space indent</h4>
+
+<p>Why? <em>this is standard across almost all Ruby code</em></p>
+
+<h4>Do not bother aligning arrows, equals, or colons.  If there are so many grouped together, consider restructuring your code</h4>
+
+<p>Why? <em>Alignment requires extra work to maintain, and results in hard-to-understand diffs when alignment must change</em></p>
+
+<h4>Avoid single-line methods</h4>
+
+<p>Why? <em>Single-line methods are harder to change when the method needs an additional line</em></p>
+
+<h4>Keep line lengths 80 characters or less unless doing so negatively impacts readability (e.g. for large string literals)</h4>
+
+<p>Why? <em>Excessively long lines can be very difficult to read and understand; a low line length encourages keeping things simple</em></p>
+
+<h4>Literal arrays or hashes should have a comma after <em>every</em> element, includingn the last one</h4>
+
+<p>Why? <em>This makes it easier to add elements and reorder elements without having to worry about missing commas</em></p>
+
+<h4>For 'options-hash' calls, align keys across multiple lines, one per line, e.g.</h4>
+
+<p>Why? <em>This makes it easier to read and modify the options sent to the method</em></p>
+
+<div class="highlight">
+<pre><span class="n">some_call</span><span class="p">(</span><span class="n">non_option1</span><span class="p">,</span><span class="n">non_option2</span><span class="p">,</span><span class="ss">:foo</span> <span class="o">=&gt;</span> <span class="s2">"bar"</span><span class="p">,</span>
+                                  <span class="ss">:blah</span> <span class="o">=&gt;</span> <span class="s2">"quux"</span><span class="p">,</span>
+                                  <span class="ss">:bar</span> <span class="o">=&gt;</span> <span class="mi">42</span><span class="p">)</span>
+</pre>
+</div>
+
+
+<h4>When declaring attributes with <code>attr_reader</code> or <code>attr_accessor</code>, put one per line</h4>
+
+<p>Why? <em>This makes it easier to add new attributres without creating complex diffs.  It also affords documenting what the attributes represent</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Wrong; hard to modify</span>
+<span class="kp">attr_accessor</span> <span class="ss">:first_name</span><span class="p">,</span> <span class="ss">:last_name</span><span class="p">,</span> <span class="ss">:gender</span>
+
+<span class="c1"># Right; we can easily modify and document</span>
+<span class="kp">attr_accessor</span> <span class="ss">:first_name</span>
+<span class="kp">attr_accessor</span> <span class="ss">:last_name</span>
+<span class="kp">attr_accessor</span> <span class="ss">:gender</span>
+</pre>
+</div>
+
+
+<h4>Literal lists should be on one line or one element per line, depending on length</h4>
+
+<p>Why? <em>Two-dimensional data is hard to read and modify.</em></p>
+
+<h4>
+<code>protected</code> and <code>private</code> should be aligned with <code>class</code>
+</h4>
+
+<p>Why? <em>No reason, just my personal preference</em></p>
+
+<div class="highlight">
+<pre><span class="k">class</span> <span class="nc">SomeClass</span>
+
+  <span class="k">def</span> <span class="nf">public_method</span>
+  <span class="k">end</span>
+
+<span class="kp">protected</span>
+
+  <span class="k">def</span> <span class="nf">protected_method</span>
+  <span class="k">end</span>
+
+<span class="kp">private</span>
+
+  <span class="k">def</span> <span class="nf">private_method</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>
+<code>protected</code> and <code>private</code> are surrounded by newlines</h4>
+
+<p>Why? <em>Visually sets them off</em></p>
+
+<h4>A newline after <code>class</code> or <code>module</code>
+</h4>
+
+<p>Why? <em>Visual clearance</em></p>
+
+<h4>A newline after <code>end</code> unless it's the string of <code>end</code>s for the end of the class/module</h4>
+
+<p>Why? <em>I don't get much value from visual clearance for the end blocks that 'close' a class or module</em></p>
+
+<h4>class methods should be defined via <code>def self.class_name</code> and not inside a <code>class &lt;&lt; self</code>
+</h4>
+
+<p>Why? <em>This reduces errors caused by moving methods around, and also doesn't require you to scroll up in the class to determine what type of method it is; you can see it instantly</em></p>
+
+<h4>when using the return value of an <code>if</code> expression, indent the <code>else</code> and <code>end</code> with the <code>if</code>:</h4>
+
+<p>Why? <em>This makes it very clear that you are using <code>if..else..end</code> as a complex expression and not as a control structure</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Wrong</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">if</span> <span class="n">something?</span>
+  <span class="ss">:foo</span>
+<span class="k">else</span>
+  <span class="ss">:bar</span>
+<span class="k">end</span>
+
+<span class="c1"># Right</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">if</span> <span class="n">something?</span>
+            <span class="ss">:foo</span>
+         <span class="k">else</span>
+            <span class="ss">:bar</span>
+         <span class="k">end</span>
+</pre>
+</div>
+
+
+<h2>Naming</h2>
+
+<h3>Variables</h3>
+
+<h4>Avoid abbreviations</h4>
+
+<p>Why? <em>Abbreviations can clash, require explanation and generally disrupt the flow of things</em></p>
+
+<h4>Avoid one-character names</h4>
+
+<p>Why? <em>No reason not to be descriptive</em></p>
+
+<h4>For non 'primitive' types, use the name of the class, or the name of the class plural if a collection, unless there will be multiple instances in scope, then <em>do not</em> follow this convention</h4>
+
+<p>Why? <em>When there's no particular specific name for something, using its type makes it easy to remember what the object is</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Just use the classname</span>
+<span class="k">def</span> <span class="nf">routine</span>
+  <span class="n">customer</span> <span class="o">=</span> <span class="no">Customer</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="mi">124</span><span class="p">)</span>
+  <span class="n">customers</span> <span class="o">=</span> <span class="no">Customer</span><span class="o">.</span><span class="n">find_all_by_gender</span><span class="p">(</span><span class="s2">"M"</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1"># Here we have two lists, so neither should just be "customers"</span>
+<span class="k">def</span> <span class="nf">other_routine</span>
+  <span class="n">males</span> <span class="o">=</span> <span class="no">Customer</span><span class="o">.</span><span class="n">find_all_by_gender</span><span class="p">(</span><span class="s2">"M"</span><span class="p">)</span>
+  <span class="n">minors</span> <span class="o">=</span> <span class="no">Customer</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s1">'age &lt; ?'</span><span class="p">,</span><span class="mi">18</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1"># Here we have a very long method that, even though it should be refactored,</span>
+<span class="c1"># isn't, so we use a more verbose variable name to keep things clear 50 lines in.</span>
+<span class="k">def</span> <span class="nf">other_routine</span>
+  <span class="c1"># tons of code</span>
+  <span class="n">male_customers</span> <span class="o">=</span> <span class="no">Customer</span><span class="o">.</span><span class="n">find_all_by_gender</span><span class="p">(</span><span class="s2">"M"</span><span class="p">)</span>
+  <span class="n">minor_customers</span> <span class="o">=</span> <span class="no">Customer</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s1">'age &lt; ?'</span><span class="p">,</span><span class="mi">18</span><span class="p">)</span>
+  <span class="c1"># tons more code</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>For procs and lambdas, use a verb as opposed to <code>foo_proc</code> or <code>foo_block</code>
+</h4>
+
+<p>Why? <em>Procs and lambdas are more like methods and thus should be verbs, since they do something</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Wrong; the variable has been needlessly "nounified" for no real benefit</span>
+<span class="n">saver</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">save!</span> <span class="p">}</span>
+
+<span class="c1"># Correct; the variable, being a verb, is instantly recognizable as an action</span>
+<span class="n">save</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">save!</span> <span class="p">}</span>
+</pre>
+</div>
+
+
+<h3>Methods</h3>
+
+<h4>Follow the 'referentially transparent' naming scheme of using <code>foo</code> and <code>foo=</code> for 'accessors'.</h4>
+
+<p>Why? <em>Since Ruby allows the '=' form, using 'get' or 'set' in the names just adds noise</em></p>
+
+<h4>Boolean methods end in a question mark</h4>
+
+<p>Why? <em>This allows methods that can used in expressions to clearly stand out and makes code more fluent</em></p>
+
+<h4>Dangerous methods end in a bang.</h4>
+
+<p>Why? <em>This calls out methods whose use should be carefully understood</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Mutates the object; dangerous on an otherwise immutable object</span>
+<span class="k">def</span> <span class="nf">process!</span>
+  <span class="vi">@processed</span> <span class="o">=</span> <span class="kp">true</span>
+<span class="k">end</span>
+
+<span class="c1"># Has a side-effect that is not obvious and might not be idempotent</span>
+<span class="k">def</span> <span class="nf">render!</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+  <span class="n">queue_event</span><span class="p">(</span><span class="ss">:some_event</span><span class="p">)</span>
+  <span class="n">output</span><span class="o">.</span><span class="n">puts</span> <span class="vi">@content</span>
+<span class="k">end</span>
+
+<span class="c1"># Raises an exception on failure, unlike its analog, save, which does not</span>
+<span class="k">def</span> <span class="nf">save!</span>
+  <span class="k">raise</span> <span class="no">ValidationException</span> <span class="k">unless</span> <span class="nb">self</span><span class="o">.</span><span class="n">save</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h3>Classes And Modules</h3>
+
+<h4>For non-Rails apps, namespace all classes in a top-level module named for your app or library</h4>
+
+<p>Why? <em>Prevents naming clashes when your code is used with other libraries</em></p>
+
+<h4>Class names should be comprehensible without their module namespace.</h4>
+
+<p>Why? <em>Ensures that classnames are understood everywhere used.</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Wrong; 'Base' is not an accurate classname</span>
+<span class="k">class</span> <span class="nc">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+<span class="k">end</span>
+
+<span class="c1"># Good; using the class without its namespaced module doesn't remove any clarity</span>
+<span class="k">class</span> <span class="nc">Gateway</span><span class="o">::</span><span class="no">BraintreeGateway</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>Class names should be nouns</h4>
+
+<p>Why? <em>Classes represent things, and things are nouns</em></p>
+
+<h4>Non-namespace module names should tend toward adjectives, e.g. <code>Enumerable</code>
+</h4>
+
+<p>Why? <em>Modules used as mixins represent a trait or aspect that you want to use to enhance a class.  These are naturally adjectives.</em></p>
+
+<h4>Namespace module names should tend toward nouns</h4>
+
+<p>Why? <em>Using modules just for namespacing is, again, specifying things, which are nouns</em></p>
+
+<h2>General Style</h2>
+
+<h4>Avoid 1.9-style hash syntax</h4>
+
+<p>Why? <em>This syntax only works if your hash keys are symbols; otherwise you have to use the old syntax.  There's a very limited benefit to the new syntax, and the cost is two ways of doing things, increasing mental overhead when reading/writing code.  Further, for libraries, 1.8 compatibility is nice to achieve</em></p>
+
+<h4>For libraries or CLI apps, stick to 1.8-compatible features where possible</h4>
+
+<p>Why? <em>Many shops are still on 1.8, and many systems have 1.8 as the default, so there's no reason not to keep 1.8 compatible for code that will be shared</em></p>
+
+<h4>Blocks that return a value you intend to use should use curly braces</h4>
+
+<p>Why? <em>This visually sets them off, and makes for a cleaner chaning syntax</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Wrong; calling a method on 'end' is awkward looking</span>
+<span class="n">male_teens</span> <span class="o">=</span> <span class="no">Customers</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">select</span> <span class="k">do</span> <span class="o">|</span><span class="n">customer</span><span class="o">|</span>
+  <span class="n">customer</span><span class="o">.</span><span class="n">gender</span> <span class="o">==</span> <span class="ss">:male</span> 
+<span class="k">end</span><span class="o">.</span><span class="n">reject</span> <span class="k">do</span> <span class="o">|</span><span class="n">man</span><span class="o">|</span>
+  <span class="n">man</span><span class="o">.</span><span class="n">age</span> <span class="o">&gt;</span> <span class="mi">19</span> <span class="o">||</span> <span class="n">man</span><span class="o">.</span><span class="n">age</span> <span class="o">&lt;</span> <span class="mi">13</span>
+<span class="k">end</span>
+
+<span class="c1"># Right; the chaining and use of the comprehensions is clear</span>
+<span class="n">male_teens</span> <span class="o">=</span> <span class="no">Customers</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">customer</span><span class="o">|</span>
+  <span class="n">customer</span><span class="o">.</span><span class="n">gender</span> <span class="o">==</span> <span class="ss">:male</span> 
+<span class="p">}</span><span class="o">.</span><span class="n">reject</span> <span class="p">{</span> <span class="o">|</span><span class="n">man</span><span class="o">|</span>
+  <span class="n">man</span><span class="o">.</span><span class="n">age</span> <span class="o">&gt;</span> <span class="mi">19</span> <span class="o">||</span> <span class="n">man</span><span class="o">.</span><span class="n">age</span> <span class="o">&lt;</span> <span class="mi">13</span>
+<span class="p">}</span>
+</pre>
+</div>
+
+
+<h4>Blocks that do not return a value or a value you will ignore use <code>do..end</code>
+</h4>
+
+<p>Why? <em>These blocks are more control-structures, so <code>do..end</code> is more natural.  It sets them off from blocks that produce a useful value</em></p>
+
+<h4>Always use parens when calling methods with arguments unless you are coding in a heavy 'DSL Style' bit of code</h4>
+
+<p>Why? <em>Parens visually set off the parameters, and reduce confusion about how Ruby will parse the line, making the code easier to maintain</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Given this code</span>
+<span class="k">class</span> <span class="nc">Person</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span><span class="n">status</span><span class="p">)</span>
+    <span class="c1"># ..</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+<span class="no">Person</span><span class="o">.</span><span class="n">create</span> <span class="s1">'Dave'</span><span class="p">,</span> <span class="ss">:single</span>
+<span class="c1"># and we change it so that :status is based on a condition</span>
+
+<span class="c1"># Wrong; what does this line do?</span>
+<span class="no">Person</span><span class="o">.</span><span class="n">create</span> <span class="s1">'Dave'</span><span class="p">,</span> <span class="n">wife</span> <span class="o">||</span> <span class="ss">:single</span>
+
+<span class="c1"># If we used parens from the get go, it's a no brainer</span>
+<span class="no">Person</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'Dave'</span><span class="p">,</span><span class="ss">:single</span><span class="p">)</span>
+<span class="c1"># Right; code is clear</span>
+<span class="no">Person</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'Dave'</span><span class="p">,</span><span class="n">wife</span> <span class="o">||</span> <span class="ss">:single</span><span class="p">)</span>
+</pre>
+</div>
+
+
+<h4>Do not use <code>else</code> with an <code>unless</code>
+</h4>
+
+<p>Why? <em>the expression becomes too difficult to unwind, just use an <code>if</code></em></p>
+
+<h4>Do not use an <code>unless</code> for any expression that requires a <code>||</code>, <code>&amp;&amp;</code>, or <code>!</code>.  Either extract to a method or use <code>if</code>
+</h4>
+
+<p>Why? <em><code>unless</code> is like putting a giant <code>!()</code> around your expression, so it becomes harder and harder to understand what is being tested by adding this.  It's not worth it</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Wrong; too hard to figure out</span>
+<span class="k">unless</span> <span class="n">person</span><span class="o">.</span><span class="n">valid?</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">person</span><span class="o">.</span><span class="n">from</span><span class="p">(</span><span class="s1">'US'</span><span class="p">)</span>
+  <span class="c1"># doit</span>
+<span class="k">end</span>
+
+<span class="c1"># Right; DeMorgan's law simplified this</span>
+<span class="k">if</span> <span class="o">!</span><span class="n">person</span><span class="o">.</span><span class="n">valid?</span> <span class="o">||</span> <span class="n">person</span><span class="o">.</span><span class="n">from</span><span class="p">(</span><span class="s1">'US'</span><span class="p">)</span>
+  <span class="c1"># doit</span>
+<span class="k">end</span>
+
+<span class="c1"># Better; use a method</span>
+<span class="k">unless</span> <span class="n">valid_and_foreign?</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+  <span class="c1"># doit</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>Use inline if/unless for 'early-exit' features only</h4>
+
+<p>Why? <em>Code can become hard to read when conditions are trailing and complex.  Early-exit conditions are generally simple and can benefit from this form</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Wrong; too complex</span>
+<span class="n">person</span><span class="o">.</span><span class="n">save</span> <span class="k">unless</span> <span class="n">person</span><span class="o">.</span><span class="n">from</span><span class="p">(</span><span class="s1">'US'</span><span class="p">)</span> <span class="o">||</span> <span class="n">person</span><span class="o">.</span><span class="n">age</span> <span class="o">&gt;</span> <span class="mi">18</span>
+
+<span class="c1"># OK; an early exit</span>
+<span class="k">raise</span> <span class="s2">"person may not be nil"</span> <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">nil?</span>
+</pre>
+</div>
+
+
+<h4>Do not catch <code>Exception</code> unless you <em>really</em> want to catch 'em all.</h4>
+
+<p>Why? <em><code>Exception</code> is the base of <em>all</em> exceptions, and you typically don't want to catch memory exceptions and the like.  Catch <code>StandardError</code> instead</em></p>
+
+<h4>When you must mutate an object before returning it, avoid creating intermediate objects and use <code>tap</code>:</h4>
+
+<p>Why? <em>Intermediate objects increase the mental requirements for understanding a routine.  <code>tap</code> also creates a nice scope in which the object is being mutated; you will not forget to return the object when you change the code later</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Wrong</span>
+<span class="k">def</span> <span class="nf">eligible_person</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+  <span class="n">person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="nb">name</span><span class="p">)</span>
+  <span class="n">person</span><span class="o">.</span><span class="n">update_eligibility</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+  <span class="n">person</span><span class="o">.</span><span class="n">save!</span>
+  <span class="n">person</span>
+<span class="k">end</span>
+
+<span class="c1"># Right</span>
+<span class="k">def</span> <span class="nf">eligible_person</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+  <span class="no">Person</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="nb">name</span><span class="p">)</span><span class="o">.</span><span class="n">tap</span> <span class="p">{</span> <span class="o">|</span><span class="n">person</span><span class="o">|</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">update_eligibility</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">save!</span>
+  <span class="p">}</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>Feel free to chain <code>Enumerable</code> calls using simple blocks instead of one complex block that does everything.</h4>
+
+<p>Why? <em>The braces syntax encourages clean chaning, and with simple blocks, you can easily follow step-by-step what is being done without having to have a bunch of private methods explaining things.</em></p>
+
+<h4>Avoid conditionals based on the truthiness or falsiness of a variable.  Use <code>.present?</code> or <code>.nil?</code> to be clear as to what's being tested</h4>
+
+<p>Why? <em>It's a lot clearer when you state exactly what you are testing; this makes it easier to change the code later, and avoids sticky issues like 0 and the empty string being truthy</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Wrong; intent is masked</span>
+<span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">name</span>
+  <span class="c1"># do it</span>
+<span class="k">end</span>
+
+<span class="c1"># Right; we can see just what we're testing</span>
+<span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">present?</span>
+  <span class="c1"># do it</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>If your method returns true or false, be sure those are the only values returned.</h4>
+
+<p>Why? <em>Returning a 'truthy' value will lead to unintended consequences, and could lead to complex dependencies in your code.  You don't need the hassle</em></p>
+
+<h2>Design</h2>
+
+<h4>Classes should do one thing and one thing only</h4>
+
+<h4>If a class has only one method, consider using a lambda or proc instead</h4>
+
+<p>Why? <em>A class with one method, especially Doer.do, is just a function, so make it a lambda</em></p>
+
+<h4>For a base class with abstract methods, include the methods in the base class and have them raise.</h4>
+
+<p>Why? <em>This gives you a single place to document which methods subclasses are expected to implement, and ensures that, at least at runtime, they <strong>are</strong> implemented</em></p>
+
+<h4>Avoid instantiating classes inside other classes.  Prefer dependency injection and default parameter values.</h4>
+
+<p>Why? <em>This makes it easier to test the classes, but doesn't require Herculean efforts to instantiate classes at runtime:</em></p>
+
+<div class="highlight">
+<pre><span class="k">class</span> <span class="nc">PersonFormatter</span>
+  <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+    <span class="c1"># whatever</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># Wrong; we are tightly coupled to an implementation and have to use</span>
+<span class="c1"># crazy mocks to fake this out</span>
+<span class="k">class</span> <span class="nc">View</span>
+  <span class="k">def</span> <span class="nf">render</span>
+    <span class="c1"># code</span>
+    <span class="nb">puts</span> <span class="no">PersonFormatter</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+    <span class="c1"># more code</span>
+  <span class="k">end</span>
+
+
+<span class="c1"># Correct; Option 1 - constructor injection</span>
+<span class="k">class</span> <span class="nc">View</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">person_formatter</span><span class="o">=</span><span class="no">PersonFormatter</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+    <span class="vi">@person_formatter</span> <span class="o">=</span> <span class="n">person_formatter</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">render</span>
+    <span class="c1"># code</span>
+    <span class="nb">puts</span> <span class="vi">@person_formatter</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+    <span class="c1"># more code</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># Correct; Option 2 - setter injection with a sensible default</span>
+<span class="k">class</span> <span class="nc">View</span>
+  <span class="kp">attr_writer</span> <span class="ss">:person_formatter</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">person_formatter</span><span class="p">)</span>
+    <span class="vi">@person_formatter</span> <span class="o">=</span> <span class="no">PersonFormatter</span><span class="o">.</span><span class="n">new</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">render</span>
+    <span class="c1"># code</span>
+    <span class="nb">puts</span> <span class="vi">@person_formatter</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+    <span class="c1"># more code</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>Don't make methods public unless they are part of the public interface</h4>
+
+<p>Why? <em>Public is the way to formally document the contract of your class.  Putting methods that shouldn't be called by others in the public interface is just lazy, and increases maintenance down the road.</em></p>
+
+<h4>
+<code>protected</code> is likely not correct; only use it for the template method pattern and even then, would a lambda or proc work better?</h4>
+
+<p>Why? <em>Protected is used to allow subclasses to call non-public methods.  This implies a potentially complex type hierarchy, which is likely not correct for what you are doing.</em></p>
+
+<h4>Know the <code>ClassMethods</code> pattern for sharing class methods via a module</h4>
+
+<p>Why? <em>It's a convienient pattern to add macro-style methods to classes, and is used in Rails source, so will be easily recognizable by others</em></p>
+
+<div class="highlight">
+<pre><span class="k">module</span> <span class="nn">Helper</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">included</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="n">k</span><span class="o">.</span><span class="n">extend</span> <span class="no">ClassMethods</span>
+  <span class="k">end</span>
+  <span class="k">module</span> <span class="nn">ClassMethods</span>
+    <span class="k">def</span> <span class="nf">strategy</span><span class="p">(</span><span class="n">strat</span><span class="p">)</span>
+      <span class="vi">@strategy</span> <span class="o">=</span> <span class="n">strat</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">UsesHelper</span>
+  <span class="kp">include</span> <span class="no">Helper</span>
+
+  <span class="n">strategy</span> <span class="ss">:foo</span>
+
+  <span class="k">def</span> <span class="nf">doit</span><span class="p">;</span> <span class="nb">puts</span> <span class="nb">self</span><span class="o">.</span><span class="n">strat</span><span class="p">;</span> <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>Do not use ivars as a way of avoiding method parameters.</h4>
+
+<p>Why? <em>Instance variables are a form of global data, and your routines' complexity increases when their input comes from multiple sources.  If the instance variables control flow or logic, pass them in as parameters</em></p>
+
+<h4>private methods should be used to make public methods clear; they should avoid reliance on ivars if at-all possible</h4>
+
+<p>Why? <em>Private methods that do not rely on instance variables can very easily be extracted to new classes when things get compledx</em></p>
+
+<h4>private methods calling more private methods might indicate a second class is hiding inside this class</h4>
+
+<h2>Documentation</h2>
+
+<h3>General</h3>
+
+<h4>Use RDoc instead of YARD or TomDoc</h4>
+
+<p>Why? <em>RDoc.info does not support TomDoc, and YARD is way too heavyweight</em></p>
+
+<h4>Do not surround class or method names in your project with code blocks</h4>
+
+<p>Why? <em>RDoc will link to methods or classes in your project</em></p>
+
+<h4>DO surround class or method names from other libraries with code blocks</h4>
+
+<p>Why? <em>This makes it clear that you mean a method name or class, because RDoc cannot link outside of your codebase</em></p>
+
+<h4>Reserve inline comments for answering 'Why?' questions</h4>
+
+<p>Why? <em>Don't restate what the code does, but DO explain why it works the way it does, especially if it does something in a suprising or weird way, from a business logic perspective</em></p>
+
+<div class="highlight">
+<pre><span class="c1">## Wrong; don't explain what the code does, we can read it</span>
+<span class="k">def</span> <span class="nf">minor?</span>
+  <span class="c1"># Check if they are under 19</span>
+  <span class="nb">self</span><span class="o">.</span><span class="n">age</span> <span class="o">&lt;</span> <span class="mi">19</span>
+<span class="k">end</span>
+
+<span class="c1">## Right; explain the odd logic so others know it is intentional, with</span>
+<span class="c1">## a ref for more info as to why</span>
+<span class="k">def</span> <span class="nf">minor?</span>
+  <span class="c1"># For our purposes, an 18-year-old is still a minor.  See</span>
+  <span class="c1"># ticket XYZ for a more detailed discussion</span>
+  <span class="nb">self</span><span class="o">.</span><span class="n">age</span> <span class="o">&lt;</span> <span class="mi">19</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h3>Readme</h3>
+
+<h4>There should be a README that includes:</h4>
+
+<p>Why? <em>Because a README is a nice way to explain what your code is/does</em></p>
+
+<h4>The README should explain what the library/app does, in one line</h4>
+
+<p>Why? <em>Summarizing things in one line is helpful</em></p>
+
+<h4>The README should explain how to install your app/code</h4>
+
+<p>Why? <em>Because not everyone knows what needs to be done, even if it's just <code>gem install</code></em></p>
+
+<h4>The README should show the simplest example possible of using the library/ap</h4>
+
+<p>Why? <em>This, along with the description allows someone to understand your library/app in under a minute</em></p>
+
+<h4>A more detailed overview, pointing to key classes or modules</h4>
+
+<p>Why? <em>When rendered as RDoc, these classes link to where the user should start reading to get a deeper perspective</em></p>
+
+<h4>Additional info for developing with the code</h4>
+
+<p>Why? <em>If you want contributions, developers need to know how to work with your code</em></p>
+
+<h3>Methods</h3>
+
+<h4>Rubydoc the parameter types and return types</h4>
+
+<p>Why? <em>There's no other way to tell what the types are and it's just not nice to hide this info</em></p>
+
+<h4>Document all known keys, their types, and their default values for 'options hash' style params</h4>
+
+<p>Why? <em>Because it's jerky not to; there's no other way to know what they are</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Makes a request</span>
+<span class="c1">#</span>
+<span class="c1"># url:: url to request</span>
+<span class="c1"># options:: options to control request:</span>
+<span class="c1">#           +:method+:: HTTP method to use as a String (default "GET")</span>
+<span class="c1">#           +:content_type+:: Mime type to include as a header, as a String (default "text/plain")</span>
+<span class="c1">#           +:if_modified_since+:: Date for if-modified-since header, default nil</span>
+<span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">options</span><span class="o">=</span><span class="p">{})</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>Document a method's purpose if it's name alone cannot easily communicate it</h4>
+
+<p>Why? <em>Good method names are preferred, but if it's somewhat complex, add a bit more about what the method does</em></p>
+
+<h4>Document the meaning of parameter types if their name alone isn't enough to communicate it</h4>
+
+<p>Why? <em>Again, the parameter names should be meaninful, but if they don't full explain things, throws us a bone</em></p>
+
+<h4>Do not document default parameter values</h4>
+
+<p>Why? <em>These valuers show up in rdoc, so restating them is just a maintenance issue</em></p>
+
+<h4>Document the types of each attribute created with an <code>attr_</code> method</h4>
+
+<p>Why? <em>No other way to know what the types are</em></p>
+
+<h3>Classes And Modules</h3>
+
+<h4>Rubydoc all classes with at least the purpose of the class</h4>
+
+<p>Why? <em>Naming is hard; documentation helps explain what a class is for</em></p>
+
+<h4>For non-namespaced modules, the Rubydoc should include the names and purpose of all methods that a class is expected to provide when mixing in</h4>
+
+<p>Why? <em>Because we don't have types, the user of your module needs to know what methods to implement to make the module work</em></p>
+
+<h4>Summarize the purpose of the class or module as the first line</h4>
+
+<p>Why? <em>This lets someone see, at a glance, what the construct is for</em></p>
+
+<h4>Do not start documentation with 'This class' or 'This module'</h4>
+
+<p>Why? <em>We know what kind of thing it is; just state what it does</em></p>
+
+<h2>Testing</h2>
+
+<h4>Unit test methods should have three parts: Given, When, Then</h4>
+
+<p>Why? <em>This makes it clear what each section of the test is doing, which is crucial when tests get complex</em></p>
+
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">test_something</span>
+  <span class="c1"># Given</span>
+  <span class="n">person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"Dave"</span><span class="p">,</span><span class="mi">38</span><span class="p">)</span>
+
+  <span class="c1"># When</span>
+  <span class="n">minor</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">minor?</span>
+
+  <span class="c1"># Then</span>
+  <span class="n">assert</span> <span class="n">minor</span><span class="p">,</span><span class="s2">"Expected </span><span class="si">#{</span><span class="n">person</span><span class="o">.</span><span class="n">inspect</span><span class="si">}</span><span class="s2"> to be a minor"</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>For mocking, include a fourth part before 'When' so that the flow of the test is maintained</h4>
+
+<p>Why? <em>It's important to established what the mock expectations are, and thinking of it as seperate from a given helps the test read better.</em></p>
+
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">test_something</span>
+  <span class="c1"># Given</span>
+  <span class="n">person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"Dave"</span><span class="p">,</span><span class="mi">38</span><span class="p">)</span>
+
+  <span class="c1"># When the test runs, Then</span>
+  <span class="no">AuditStats</span><span class="o">.</span><span class="n">expects</span><span class="p">(</span><span class="ss">:query</span><span class="p">)</span><span class="o">.</span><span class="n">returns</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+
+  <span class="c1"># When</span>
+  <span class="n">minor</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">minor?</span>
+
+  <span class="c1"># Then</span>
+  <span class="n">assert</span> <span class="n">minor</span><span class="p">,</span><span class="s2">"Expected </span><span class="si">#{</span><span class="n">person</span><span class="o">.</span><span class="n">inspect</span><span class="si">}</span><span class="s2"> to be a minor"</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>If your only assertion is that mock expectations are met, include a comment indicating this</h4>
+
+<p>Why? <em>It's important to let others know your intent that the mock expectations ARE the test and that you just didn't forget an assert</em></p>
+
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">test_something</span>
+  <span class="c1"># Given</span>
+  <span class="n">person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"Dave"</span><span class="p">,</span><span class="mi">38</span><span class="p">)</span>
+
+  <span class="c1"># When the test runs, Then</span>
+  <span class="no">PersonDAO</span><span class="o">.</span><span class="n">expects</span><span class="p">(</span><span class="ss">:save</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+
+  <span class="c1"># When</span>
+  <span class="n">person</span><span class="o">.</span><span class="n">save!</span>
+
+  <span class="c1"># Then mock expectations should've been met</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>For block-based assertions, place the code inside a lambda to preserve the structure</h4>
+
+<p>Why? <em>Again, this preserves the flow of the test</em></p>
+
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">test_something</span>
+  <span class="c1"># Given</span>
+  <span class="nb">name</span> <span class="o">=</span> <span class="s1">'Dave'</span>
+
+  <span class="c1"># When</span>
+  <span class="n">code</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="no">Person</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="nb">name</span><span class="p">)</span> <span class="p">}</span>
+
+  <span class="c1"># Then</span>
+  <span class="n">assert_difference</span><span class="p">(</span><span class="s1">'Person'</span><span class="p">,</span><span class="o">&amp;</span><span class="n">code</span><span class="p">)</span>
+  <span class="n">assert_equal</span> <span class="nb">name</span><span class="p">,</span><span class="no">Person</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">name</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>Avoid literals that aren't relevant to the test; abstract into a <code>any</code> method or <code>some</code> method, e.g. <code>some_int</code>
+</h4>
+
+<p>Why? <em>Tests littered with literals can be very hard to follow; if the only literals in the test are those specific to <em>this</em> test, it becomes very clear what's being tested.</em></p>
+
+<h4>For literals that <em>are</em> relevant to the test, do not repeat them in a test</h4>
+
+<p>Why? <em>Just like magic strings are bad in real code, they are in test code.  Plus it codifies that the values are the same by design and not just by happenstance</em></p>
+
+<h4>Extract setup and assertions that are the same <em>by design</em> into helper methods</h4>
+
+<p>Why? <em>If you are running a different test under the exact same conditions as another test, extract that duplicative code into a helper.  Similarly, if you are conducting a different test that should have the same outcome, extract those assertions to a helper.</em></p>
+
+<h4>Leave repeated code that is the same <em>by happenstance</em>
+</h4>
+
+<p>Why? <em>This sort of duplication is OK becauser they code is only the same by happenstance, and may diverge as the code matures.  By leaving it seperate, it's easier to change</em></p>
+
+<h4>The 'When' part of your tests should ideally use the public API of the class under test.</h4>
+
+<p>Why? <em>Some RSpec constructs assert things about the class under test without calling its public API, e.g. <code>person.should be_valid</code>.  This goes against the spirit of TDD, and requires the reader to make a mental transaction between the testing DSL and the class' method, with no discernable benefit.</em></p>
+
+<h4>If you need to sanity-check your setup in the 'Given', use <code>raise</code> instead of <code>assert</code>
+</h4>
+
+<p>Why? <em><code>raise</code> will mark your test as erroneous, not failed, as that is the case when the setup conditions for the test aren't correct.  Better yet, don't use brittle globally-shared test fixtures or factories.</em></p>
+
+<h4>Avoid fixtures, factories, or other globally-shared setup data.</h4>
+
+<p>Why? <em>As an app matures, the fixtures or factories become incredibly brittle and hard to modify or understand.  It also places key elements of your test setup far away from the test itself, making it hard to understand any given test.</em></p>
+
+<h2>Rails</h2>
+
+<h3>Controllers</h3>
+
+<h4>There should be very few <code>if</code> statements; controllers should be as dumb as possible</h4>
+
+<p>Why? <em><code>if</code> statements usually imply business logic, which does not belong in controllers.  The logic in the controller should be mainly concerned with send the correct response to the user.</em></p>
+
+<h4>Avoid excessive filters, or filters that are highly conditional</h4>
+
+<p>Why? <em>When the number of filters increases, it becomes harder and harder to know what code is executing and in what order.  Further, when filters set instance variables, it becomes increasingly difficult to understand where those variables are being set, and the filters become very order-specific.  Finally, conditional filters, or filters used on only one controller method increase complexity beyond the point of utility</em></p>
+
+<h4>
+<code>rake routes</code> should be the truth, the whole truth, and nothing but the truth</h4>
+
+<p>Why? <em>By lazily creating all routes for a resource, when you only need a few to be valid, you create misleading output for newcomers, and allow valid named route methods to be created that can only fail at runtime or in production.</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Wrong; our app only supports create and show</span>
+<span class="n">resources</span> <span class="ss">:transactions</span>
+
+<span class="c1"># Right; rake routes reflects the reality of our app now</span>
+<span class="n">resources</span> <span class="ss">:transactions</span><span class="p">,</span> <span class="ss">:only</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:create</span><span class="p">,</span> <span class="ss">:show</span><span class="o">]</span>
+</pre>
+</div>
+
+
+<h4>Prefer exposing the exact objects views require rather than 'root' objects requiring deep traveral</h4>
+
+<p>Why? <em>When views navigate deep into object hierarchies, it becomes very difficult to understand what data the views really <em>do</em> require, and it makes refactoring anything in those object hierarchies incredibly difficult</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># A view for a person's credit cards requires the person's name, and a list of last-4, type, and expiration date of cards</span>
+
+<span class="c1"># Wrong; the view must navigate through the person to get his credit cards and has</span>
+<span class="c1"># access to the entire person objects, which is not needed</span>
+<span class="k">def</span> <span class="nf">show</span>
+  <span class="vi">@person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:person_id</span><span class="o">]</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1"># Wrong; although the view can now access credit cards directly, it's still not clear what data</span>
+<span class="c1"># is really needed by the view</span>
+<span class="k">def</span> <span class="nf">show</span>
+  <span class="vi">@person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:person_id</span><span class="o">]</span><span class="p">)</span>
+  <span class="vi">@credit_cards</span> <span class="o">=</span> <span class="vi">@person</span><span class="o">.</span><span class="n">credit_cards</span>
+<span class="k">end</span>
+
+<span class="c1"># Right; the ivars represent what the view needs AND contain only what the view needs.</span>
+<span class="c1"># You may wish to use a more sophisticated "presenter" pattern instead of OpenStruct</span>
+<span class="k">def</span> <span class="nf">show</span>
+  <span class="vi">@person_name</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:person_id</span><span class="o">].</span><span class="n">full_name</span>
+  <span class="vi">@credit_cards</span> <span class="o">=</span> <span class="vi">@person</span><span class="o">.</span><span class="n">credit_cards</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">card</span><span class="o">|</span>
+    <span class="no">OpenStruct</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:last_four</span> <span class="o">=&gt;</span> <span class="n">card</span><span class="o">.</span><span class="n">last_four</span><span class="p">,</span> 
+                   <span class="ss">:card_type</span> <span class="o">=&gt;</span> <span class="n">card</span><span class="o">.</span><span class="n">card_type</span><span class="p">,</span>
+                   <span class="ss">:expiration_date</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="n">card</span><span class="o">.</span><span class="n">expiration_month</span><span class="p">,</span><span class="n">card</span><span class="o">.</span><span class="n">expiration_year</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s1">'/'</span><span class="p">))</span>
+  <span class="p">}</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>Do not create ivars unless they are to be shared with the views.</h4>
+
+<p>Why? <em>Using instance variables to avoid passing parameters is lazy and creates complex and hard-to-understand code.  In a controller, instance variables are special: they represent the data passed to the views, and that's all they should be used for.</em></p>
+
+<h3>Active Record</h3>
+
+<h4>Do not use hooks</h4>
+
+<p>Why? <em>Hooks make your models very hard to use in different ways, and lock them to business rules that are likely not all that hard and fast.  They also make testing very difficult, as it becomes harder and harder to set up the correct state using objects that have excessive hooks on them.</em></p>
+
+<div class="highlight">
+<pre><span class="c1"># Wrong; we've hidden business logic behind a simple CRUD operation</span>
+<span class="k">class</span> <span class="nc">Person</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">after_save</span> <span class="ss">:update_facebook</span>
+
+<span class="kp">private</span>
+
+  <span class="k">def</span> <span class="nf">update_facebook</span>
+    <span class="c1"># send Facebook some status update </span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># Better; we have a method that says what it does</span>
+<span class="k">class</span> <span class="nc">Person</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+
+  <span class="k">def</span> <span class="nf">save_and_update_facebook</span>
+    <span class="k">if</span> <span class="n">save</span>
+      <span class="c1"># Send Facebook some status update</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+
+<h4>Validations should not be conditional</h4>
+
+<p>Why? <em>Validations that are not always applicable make it very hard to modify objects and enhance them, because it becomes increasingly difficult tor understand what a valid objects really is.  Further, it becomes very difficult to set up objects in a particular state for a given test if there are a lot of conditonal validations</em></p>
+
+<h4>Use database constraints to enforce valid data in the database</h4>
+
+<p>Why? <em>The database is the only place that can truly ensure various constraints, such as uniqueness.  Constraints are incredibly useful for making sure that, regardless of bugs in your code, your data will be clean.</em></p>
+
+<h4>AR objects should be as dumb as possible; only derived values should be new methods</h4>
+
+<p>Why? <em>It may be tempting to add business logic to your models.  This instanvce violates the single responsiblity principal, but it also makes the classes harder and harder to understand, test, and modify.  Treat your modesl as dumb structs with persistence, and put all other concerns on other classes.  Do not just mix in a bunch of modules.</em></p>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/davetron5000">davetron5000</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    
+  </body>
+</html>
