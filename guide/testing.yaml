@@ -1,0 +1,74 @@
+---
+- :rule: "Unit test methods should have three parts: Given, When, Then"
+  :why: "This makes it clear what each section of the test is doing, which is crucial when tests get complex"
+  :example: |
+    def test_something
+      # Given
+      person = Person.new("Dave",38)
+
+      # When
+      minor = person.minor?
+
+      # Then
+      assert minor,"Expected #{person.inspect} to be a minor"
+    end
+- :rule: "For mocking, include a fourth part before 'When' so that the flow of the test is maintained"
+  :why: "It's important to established what the mock expectations are, and thinking of it as seperate from a given helps the test read better."
+  :example: |
+    def test_something
+      # Given
+      person = Person.new("Dave",38)
+
+      # When the test runs, Then
+      AuditStats.expects(:query).returns(true)
+
+      # When
+      minor = person.minor?
+
+      # Then
+      assert minor,"Expected #{person.inspect} to be a minor"
+    end
+- :rule: "If your only assertion is that mock expectations are met, include a comment indicating this"
+  :why: "It's important to let others know your intent that the mock expectations ARE the test and that you just didn't forget an assert"
+  :example: |
+    def test_something
+      # Given
+      person = Person.new("Dave",38)
+
+      # When the test runs, Then
+      PersonDAO.expects(:save).with(person)
+
+      # When
+      person.save!
+
+      # Then mock expectations should've been met
+    end
+- :rule: "For block-based assertions, place the code inside a lambda to preserve the structure"
+  :why: "Again, this preserves the flow of the test"
+  :example: |
+    def test_something
+      # Given
+      name = 'Dave'
+
+      # When
+      code = lambda { Person.create(:name => name) }
+
+      # Then
+      assert_difference('Person',&code)
+      assert_equal name,Person.last.name
+    end
+- :rule: "Avoid literals that aren't relevant to the test; abstract into a `any` method or `some` method, e.g. `some_int`"
+  :why: "Tests littered with literals can be very hard to follow; if the only literals in the test are those specific to *this* test, it becomes very clear what's being tested."
+- :rule: "For literals that *are* relevant to the test, do not repeat them in a test"
+  :why: "Just like magic strings are bad in real code, they are in test code.  Plus it codifies that the values are the same by design and not just by happenstance"
+- :rule: "Extract setup and assertions that are the same *by design* into helper methods"
+  :why: "If you are running a different test under the exact same conditions as another test, extract that duplicative code into a helper.  Similarly, if you are conducting a different test that should have the same outcome, extract those assertions to a helper."
+- :rule: "Leave repeated code that is the same *by happenstance*"
+  :why: "This sort of duplication is OK becauser they code is only the same by happenstance, and may diverge as the code matures.  By leaving it seperate, it's easier to change"
+  :example: ""
+- :rule: "The 'When' part of your tests should ideally use the public API of the class under test."
+  :why: "Some RSpec constructs assert things about the class under test without calling its public API, e.g. `person.should be_valid`.  This goes against the spirit of TDD, and requires the reader to make a mental transaction between the testing DSL and the class' method, with no discernable benefit."
+- :rule: "If you need to sanity-check your setup in the 'Given', use `raise` instead of `assert`"
+  :why: "`raise` will mark your test as erroneous, not failed, as that is the case when the setup conditions for the test aren't correct.  Better yet, don't use brittle globally-shared test fixtures or factories."
+- :rule: "Avoid fixtures, factories, or other globally-shared setup data."
+  :why: "As an app matures, the fixtures or factories become incredibly brittle and hard to modify or understand.  It also places key elements of your test setup far away from the test itself, making it hard to understand any given test."

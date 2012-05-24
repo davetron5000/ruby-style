@@ -1,0 +1,108 @@
+---
+- :rule: "Avoid 1.9-style hash syntax"
+  :why: "This syntax only works if your hash keys are symbols; otherwise you have to use the old syntax.  There's a very limited benefit to the new syntax, and the cost is two ways of doing things, increasing mental overhead when reading/writing code.  Further, for libraries, 1.8 compatibility is nice to achieve"
+- :rule: "For libraries or CLI apps, stick to 1.8-compatible features where possible"
+  :why: "Many shops are still on 1.8, and many systems have 1.8 as the default, so there's no reason not to keep 1.8 compatible for code that will be shared"
+- :rule: "Blocks that return a value you intend to use should use curly braces"
+  :why: "This visually sets them off, and makes for a cleaner chaning syntax"
+  :example: |
+    # Wrong; calling a method on 'end' is awkward looking
+    male_teens = Customers.all.select do |customer|
+      customer.gender == :male 
+    end.reject do |man|
+      man.age > 19 || man.age < 13
+    end
+
+    # Right; the chaining and use of the comprehensions is clear
+    male_teens = Customers.all.select { |customer|
+      customer.gender == :male 
+    }.reject { |man|
+      man.age > 19 || man.age < 13
+    }
+- :rule: "Blocks that do not return a value or a value you will ignore use `do..end`"
+  :why: "These blocks are more control-structures, so `do..end` is more natural.  It sets them off from blocks that produce a useful value"
+- :rule: "Always use parens when calling methods with arguments unless you are coding in a heavy 'DSL Style' bit of code"
+  :why: "Parens visually set off the parameters, and reduce confusion about how Ruby will parse the line, making the code easier to maintain"
+  :example: |
+    # Given this code
+    class Person
+      def self.create(name,status)
+        # ..
+      end
+    end
+    Person.create 'Dave', :single
+    # and we change it so that :status is based on a condition
+
+    # Wrong; what does this line do?
+    Person.create 'Dave', wife || :single
+
+    # If we used parens from the get go, it's a no brainer
+    Person.create('Dave',:single)
+    # Right; code is clear
+    Person.create('Dave',wife || :single)
+
+- :rule: "Do not use `else` with an `unless`"
+  :why: "the expression becomes too difficult to unwind, just use an `if`"
+- :rule: "Do not use an `unless` for any expression that requires a `||`, `&&`, or `!`.  Either extract to a method or use `if`"
+  :why: "`unless` is like putting a giant `!()` around your expression, so it becomes harder and harder to understand what is being tested by adding this.  It's not worth it"
+  :example: |
+    # Wrong; too hard to figure out
+    unless person.valid? && !person.from('US')
+      # doit
+    end
+
+    # Right; DeMorgan's law simplified this
+    if !person.valid? || person.from('US')
+      # doit
+    end
+
+    # Better; use a method
+    unless valid_and_foreign?(person)
+      # doit
+    end
+
+- :rule: "Use inline if/unless for 'early-exit' features only"
+  :why: "Code can become hard to read when conditions are trailing and complex.  Early-exit conditions are generally simple and can benefit from this form"
+  :example: |
+    # Wrong; too complex
+    person.save unless person.from('US') || person.age > 18
+
+    # OK; an early exit
+    raise "person may not be nil" if person.nil?
+
+- :rule: "Do not catch `Exception` unless you *really* want to catch 'em all."
+  :why: "`Exception` is the base of *all* exceptions, and you typically don't want to catch memory exceptions and the like.  Catch `StandardError` instead"
+- :rule: "When you must mutate an object before returning it, avoid creating intermediate objects and use `tap`:"
+  :why: "Intermediate objects increase the mental requirements for understanding a routine.  `tap` also creates a nice scope in which the object is being mutated; you will not forget to return the object when you change the code later"
+  :example: |
+    # Wrong
+    def eligible_person(name)
+      person = Person.create(:name => name)
+      person.update_eligibility(true)
+      person.save!
+      person
+    end
+
+    # Right
+    def eligible_person(name)
+      Person.create(:name => name).tap { |person|
+        person.update_eligibility(true)
+        person.save!
+      }
+    end
+- :rule: "Feel free to chain `Enumerable` calls using simple blocks instead of one complex block that does everything."
+  :why: "The braces syntax encourages clean chaning, and with simple blocks, you can easily follow step-by-step what is being done without having to have a bunch of private methods explaining things."
+- :rule: "Avoid conditionals based on the truthiness or falsiness of a variable.  Use `.present?` or `.nil?` to be clear as to what's being tested"
+  :why: "It's a lot clearer when you state exactly what you are testing; this makes it easier to change the code later, and avoids sticky issues like 0 and the empty string being truthy"
+  :example: |
+    # Wrong; intent is masked
+    if person.name
+      # do it
+    end
+
+    # Right; we can see just what we're testing
+    if person.name.present?
+      # do it
+    end
+- :rule: "If your method returns true or false, be sure those are the only values returned."
+  :why: "Returning a 'truthy' value will lead to unintended consequences, and could lead to complex dependencies in your code.  You don't need the hassle"

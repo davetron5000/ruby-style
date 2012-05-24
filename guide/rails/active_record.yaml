@@ -1,0 +1,31 @@
+---
+- :rule: "Do not use hooks"
+  :why: "Hooks make your models very hard to use in different ways, and lock them to business rules that are likely not all that hard and fast.  They also make testing very difficult, as it becomes harder and harder to set up the correct state using objects that have excessive hooks on them."
+  :example: |
+    # Wrong; we've hidden business logic behind a simple CRUD operation
+    class Person < ActiveRecord::Base
+      after_save :update_facebook
+
+    private
+
+      def update_facebook
+        # send Facebook some status update 
+      end
+    end
+
+    # Better; we have a method that says what it does
+    class Person < ActiveRecord::Base
+    
+      def save_and_update_facebook
+        if save
+          # Send Facebook some status update
+        end
+      end
+    end
+
+- :rule: "Validations should not be conditional"
+  :why: "Validations that are not always applicable make it very hard to modify objects and enhance them, because it becomes increasingly difficult tor understand what a valid objects really is.  Further, it becomes very difficult to set up objects in a particular state for a given test if there are a lot of conditonal validations"
+- :rule: "Use database constraints to enforce valid data in the database"
+  :why: "The database is the only place that can truly ensure various constraints, such as uniqueness.  Constraints are incredibly useful for making sure that, regardless of bugs in your code, your data will be clean."
+- :rule: "AR objects should be as dumb as possible; only derived values should be new methods"
+  :why: "It may be tempting to add business logic to your models.  This instanvce violates the single responsiblity principal, but it also makes the classes harder and harder to understand, test, and modify.  Treat your modesl as dumb structs with persistence, and put all other concerns on other classes.  Do not just mix in a bunch of modules."

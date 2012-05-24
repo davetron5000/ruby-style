@@ -1,0 +1,12 @@
+---
+- :rule: "One class/module per file"
+  :why: "Makes it simpler to locate and organize code"
+- :rule: "Follow Rails conventions in Rails apps"
+- :rule: "For non-Rails apps, code goes in `lib`, stdlib extensions go in `ext`"
+  :why: "This is where most Rubyists will expect it, and clearly delineates _your app_ from lib extensions"
+- :rule: "Code for a class/module goes in the lower-cased, snake-cased named file, in a directory structure that matches the module namespaces.  For example, the class `Foo::Bar::Baz` should be in `foo/bar/baz.rb`, relative to `lib` or `ext`"
+  :why: "Makes it simpler to locate the code for a given class"
+- :rule: "`Test::Unit` files should go in `test` and be named `class_test.rb`, e.g. to test the class `Foo`, create `test/foo_test.rb`.  "
+  :why: "Test dir is then sorted by classname, making it easy to visually scan or auto-complete test names"
+- :rule: "Nest test classes to match modules if you have a large library with a lot of different namespaces"
+- :rule: "Follow RSpec and Cucumber file/dir naming conventions"

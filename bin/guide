@@ -1,0 +1,44 @@
+#!/usr/bin/ruby
+
+$: << File.join(File.dirname(__FILE__),'..','lib')
+
+require 'rubygems'
+require 'yaml'
+require 'methadone'
+require 'ruby-style.rb'
+
+class App
+  include Methadone::Main
+  include Methadone::CLILogging
+
+  main do |output_file|
+    order = YAML.load_file(options['order-file'])
+
+    output = output_file.nil? ? STDOUT : File.open(output_file,'w')
+    renderer = RubyStyle::FileRenderer.new(output,options)
+    renderer.render_preamble
+    RubyStyle::GuideSorter.new(options['guide-dir'],order).each_in_order do |yaml|
+      renderer.render_yaml_file(yaml)
+    end
+    output.close
+  end
+
+  version RubyStyle::VERSION
+
+  options['guide-dir'] = 'guide'
+  options['why'] = true
+  options['preamble'] = File.join(File.dirname(__FILE__),'..','etc','preamble.md')
+  options['order-file'] = File.join(File.dirname(__FILE__),'..','etc','order.yaml')
+
+  description 'Generate your style guide in markdown based on YAML files'
+
+  on("--guide-dir DIR","Dir to find your guide files")
+  on("--[no-]why","Include 'why' in the guide")
+  on("--order-file FILE","File that orders the guide elements")
+  on("--preamble FILE","File containing Markdown preamble")
+
+  arg :output_file, :optional
+
+  go!
+end
+

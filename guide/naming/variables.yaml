@@ -1,0 +1,36 @@
+---
+- :rule: "Avoid abbreviations"
+  :why: "Abbreviations can clash, require explanation and generally disrupt the flow of things"
+- :rule: "Avoid one-character names"
+  :why: "No reason not to be descriptive"
+- :rule: "For non 'primitive' types, use the name of the class, or the name of the class plural if a collection, unless there will be multiple instances in scope, then *do not* follow this convention"
+  :why: "When there's no particular specific name for something, using its type makes it easy to remember what the object is"
+  :example: |
+    # Just use the classname
+    def routine
+      customer = Customer.find(124)
+      customers = Customer.find_all_by_gender("M")
+    end
+
+    # Here we have two lists, so neither should just be "customers"
+    def other_routine
+      males = Customer.find_all_by_gender("M")
+      minors = Customer.where('age < ?',18)
+    end
+
+    # Here we have a very long method that, even though it should be refactored,
+    # isn't, so we use a more verbose variable name to keep things clear 50 lines in.
+    def other_routine
+      # tons of code
+      male_customers = Customer.find_all_by_gender("M")
+      minor_customers = Customer.where('age < ?',18)
+      # tons more code
+    end
+- :rule: "For procs and lambdas, use a verb as opposed to `foo_proc` or `foo_block`"
+  :why: "Procs and lambdas are more like methods and thus should be verbs, since they do something"
+  :example: |
+    # Wrong; the variable has been needlessly "nounified" for no real benefit
+    saver = lambda { |x| x.save! }
+
+    # Correct; the variable, being a verb, is instantly recognizable as an action
+    save = lambda { |x| x.save! }

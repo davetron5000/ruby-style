@@ -1,0 +1,25 @@
+---
+- :rule: "Follow the 'referentially transparent' naming scheme of using `foo` and `foo=` for 'accessors'."
+  :why: "Since Ruby allows the '=' form, using 'get' or 'set' in the names just adds noise"
+  :example: ""
+- :rule: "Boolean methods end in a question mark"
+  :why: "This allows methods that can used in expressions to clearly stand out and makes code more fluent"
+  :example: ""
+- :rule: "Dangerous methods end in a bang."
+  :why: "This calls out methods whose use should be carefully understood"
+  :example: |
+    # Mutates the object; dangerous on an otherwise immutable object
+    def process!
+      @processed = true
+    end
+
+    # Has a side-effect that is not obvious and might not be idempotent
+    def render!(output)
+      queue_event(:some_event)
+      output.puts @content
+    end
+
+    # Raises an exception on failure, unlike its analog, save, which does not
+    def save!
+      raise ValidationException unless self.save
+    end

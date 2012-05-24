@@ -1,0 +1,23 @@
+---
+- :rule: "Rubydoc the parameter types and return types"
+  :why: "There's no other way to tell what the types are and it's just not nice to hide this info"
+- :rule: "Document all known keys, their types, and their default values for 'options hash' style params"
+  :why: "Because it's jerky not to; there's no other way to know what they are"
+  :example: |
+    # Makes a request
+    #
+    # url:: url to request
+    # options:: options to control request:
+    #           +:method+:: HTTP method to use as a String (default "GET")
+    #           +:content_type+:: Mime type to include as a header, as a String (default "text/plain")
+    #           +:if_modified_since+:: Date for if-modified-since header, default nil
+    def request(url,options={})
+    end
+- :rule: "Document a method's purpose if it's name alone cannot easily communicate it"
+  :why: "Good method names are preferred, but if it's somewhat complex, add a bit more about what the method does"
+- :rule: "Document the meaning of parameter types if their name alone isn't enough to communicate it"
+  :why: "Again, the parameter names should be meaninful, but if they don't full explain things, throws us a bone"
+- :rule: "Do not document default parameter values"
+  :why: "These valuers show up in rdoc, so restating them is just a maintenance issue"
+- :rule: "Document the types of each attribute created with an `attr_` method"
+  :why: "No other way to know what the types are"

@@ -1,0 +1,9 @@
+---
+- :rule: "Rubydoc all classes with at least the purpose of the class"
+  :why: "Naming is hard; documentation helps explain what a class is for"
+- :rule: "For non-namespaced modules, the Rubydoc should include the names and purpose of all methods that a class is expected to provide when mixing in"
+  :why: "Because we don't have types, the user of your module needs to know what methods to implement to make the module work"
+- :rule: "Summarize the purpose of the class or module as the first line"
+  :why: "This lets someone see, at a glance, what the construct is for"
+- :rule: "Do not start documentation with 'This class' or 'This module'"
+  :why: "We know what kind of thing it is; just state what it does"

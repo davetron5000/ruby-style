@@ -1,0 +1,83 @@
+---
+- :rule: "Classes should do one thing and one thing only"
+- :rule: "If a class has only one method, consider using a lambda or proc instead"
+  :why: "A class with one method, especially Doer.do, is just a function, so make it a lambda"
+- :rule: "For a base class with abstract methods, include the methods in the base class and have them raise."
+  :why: "This gives you a single place to document which methods subclasses are expected to implement, and ensures that, at least at runtime, they **are** implemented"
+  :example: ""
+- :rule: "Avoid instantiating classes inside other classes.  Prefer dependency injection and default parameter values."
+  :why: "This makes it easier to test the classes, but doesn't require Herculean efforts to instantiate classes at runtime:"
+  :example: |
+    class PersonFormatter
+      def format(person)
+        # whatever
+      end
+    end
+
+    # Wrong; we are tightly coupled to an implementation and have to use
+    # crazy mocks to fake this out
+    class View
+      def render
+        # code
+        puts PersonFormatter.new.format(person)
+        # more code
+      end
+    
+
+    # Correct; Option 1 - constructor injection
+    class View
+      def initialize(person_formatter=PersonFormatter.new)
+        @person_formatter = person_formatter
+      end
+
+      def render
+        # code
+        puts @person_formatter.format(person)
+        # more code
+      end
+    end
+
+    # Correct; Option 2 - setter injection with a sensible default
+    class View
+      attr_writer :person_formatter
+      def initialize(person_formatter)
+        @person_formatter = PersonFormatter.new
+      end
+
+      def render
+        # code
+        puts @person_formatter.format(person)
+        # more code
+      end
+    end
+- :rule: "Don't make methods public unless they are part of the public interface"
+  :why: "Public is the way to formally document the contract of your class.  Putting methods that shouldn't be called by others in the public interface is just lazy, and increases maintenance down the road."
+- :rule: "`protected` is likely not correct; only use it for the template method pattern and even then, would a lambda or proc work better?"
+  :why: "Protected is used to allow subclasses to call non-public methods.  This implies a potentially complex type hierarchy, which is likely not correct for what you are doing."
+- :rule: "Know the `ClassMethods` pattern for sharing class methods via a module"
+  :why: "It's a convienient pattern to add macro-style methods to classes, and is used in Rails source, so will be easily recognizable by others"
+  :example: |
+    module Helper
+      def self.included(k)
+        k.extend ClassMethods
+      end
+      module ClassMethods
+        def strategy(strat)
+          @strategy = strat
+        end
+      end
+    end
+
+    class UsesHelper
+      include Helper
+
+      strategy :foo
+
+      def doit; puts self.strat; end
+    end
+
+- :rule: "Do not use ivars as a way of avoiding method parameters."
+  :why: "Instance variables are a form of global data, and your routines' complexity increases when their input comes from multiple sources.  If the instance variables control flow or logic, pass them in as parameters"
+- :rule: "private methods should be used to make public methods clear; they should avoid reliance on ivars if at-all possible"
+  :why: "Private methods that do not rely on instance variables can very easily be extracted to new classes when things get compledx"
+- :rule: "private methods calling more private methods might indicate a second class is hiding inside this class"

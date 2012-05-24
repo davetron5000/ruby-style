@@ -1,0 +1,20 @@
+---
+- :rule: "For non-Rails apps, namespace all classes in a top-level module named for your app or library"
+  :why: "Prevents naming clashes when your code is used with other libraries"
+- :rule: "Class names should be comprehensible without their module namespace."
+  :why: "Ensures that classnames are understood everywhere used."
+  :example: |
+    # Wrong; 'Base' is not an accurate classname
+    class ActiveRecord::Base
+    end
+
+    # Good; using the class without its namespaced module doesn't remove any clarity
+    class Gateway::BraintreeGateway
+    end
+
+- :rule: "Class names should be nouns"
+  :why: "Classes represent things, and things are nouns"
+- :rule: "Non-namespace module names should tend toward adjectives, e.g. `Enumerable`"
+  :why: "Modules used as mixins represent a trait or aspect that you want to use to enhance a class.  These are naturally adjectives."
+- :rule: "Namespace module names should tend toward nouns"
+  :why: "Using modules just for namespacing is, again, specifying things, which are nouns"

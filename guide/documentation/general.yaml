@@ -1,0 +1,23 @@
+---
+- :rule: "Use RDoc instead of YARD or TomDoc"
+  :why: "RDoc.info does not support TomDoc, and YARD is way too heavyweight"
+- :rule: "Do not surround class or method names in your project with code blocks"
+  :why: "RDoc will link to methods or classes in your project"
+- :rule: "DO surround class or method names from other libraries with code blocks"
+  :why: "This makes it clear that you mean a method name or class, because RDoc cannot link outside of your codebase"
+- :rule: "Reserve inline comments for answering 'Why?' questions"
+  :why: "Don't restate what the code does, but DO explain why it works the way it does, especially if it does something in a suprising or weird way, from a business logic perspective"
+  :example: |
+    ## Wrong; don't explain what the code does, we can read it
+    def minor?
+      # Check if they are under 19
+      self.age < 19
+    end
+
+    ## Right; explain the odd logic so others know it is intentional, with
+    ## a ref for more info as to why
+    def minor?
+      # For our purposes, an 18-year-old is still a minor.  See
+      # ticket XYZ for a more detailed discussion
+      self.age < 19
+    end
