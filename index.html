@@ -39,11 +39,11 @@
         <ul></ul>
       </nav>
       <section>
-        <h1>davetron5000's Ruby Style Guide</h1>
+        <h1>Ruby Style Guide</h1>
 
-<h4>These rules should be broken if it increases code clarity or maintainability</h4>
+<h4>These rules may be broken if it increases code clarity or maintainability</h4>
 
-<h4>First and foremost, use the style of the code you are modifying</h4>
+<h4>Always default to using the style of the code you are modifying</h4>
 
 <h2>Files</h2>
 
@@ -78,9 +78,9 @@
 
 <p>Why? <em>this is standard across almost all Ruby code</em></p>
 
-<h4>Do not bother aligning arrows, equals, or colons.  If there are so many grouped together, consider restructuring your code</h4>
+<h4>For more than 2 groups of arrowed, equaled, or coloned lines (e.g. a hash or set of local variables), align the operators so that the code forms a 'table'</h4>
 
-<p>Why? <em>Alignment requires extra work to maintain, and results in hard-to-understand diffs when alignment must change</em></p>
+<p>Why? <em>Although it's extra work to maintain and can break diffs, I feel that the clarity and readability of this structure is worth it - the code is read many more times than changed</em></p>
 
 <h4>Avoid single-line methods</h4>
 
@@ -98,29 +98,23 @@
 
 <p>Why? <em>This makes it easier to read and modify the options sent to the method</em></p>
 
-<div class="highlight">
-<pre><span class="n">some_call</span><span class="p">(</span><span class="n">non_option1</span><span class="p">,</span><span class="n">non_option2</span><span class="p">,</span><span class="ss">:foo</span> <span class="o">=&gt;</span> <span class="s2">"bar"</span><span class="p">,</span>
+<div class="highlight"><pre><span class="n">some_call</span><span class="p">(</span><span class="n">non_option1</span><span class="p">,</span><span class="n">non_option2</span><span class="p">,</span><span class="ss">:foo</span> <span class="o">=&gt;</span> <span class="s2">"bar"</span><span class="p">,</span>
                                   <span class="ss">:blah</span> <span class="o">=&gt;</span> <span class="s2">"quux"</span><span class="p">,</span>
                                   <span class="ss">:bar</span> <span class="o">=&gt;</span> <span class="mi">42</span><span class="p">)</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>When declaring attributes with <code>attr_reader</code> or <code>attr_accessor</code>, put one per line</h4>
 
 <p>Why? <em>This makes it easier to add new attributres without creating complex diffs.  It also affords documenting what the attributes represent</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Wrong; hard to modify</span>
+<div class="highlight"><pre><span class="c1"># Wrong; hard to modify</span>
 <span class="kp">attr_accessor</span> <span class="ss">:first_name</span><span class="p">,</span> <span class="ss">:last_name</span><span class="p">,</span> <span class="ss">:gender</span>
 
 <span class="c1"># Right; we can easily modify and document</span>
 <span class="kp">attr_accessor</span> <span class="ss">:first_name</span>
 <span class="kp">attr_accessor</span> <span class="ss">:last_name</span>
 <span class="kp">attr_accessor</span> <span class="ss">:gender</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Literal lists should be on one line or one element per line, depending on length</h4>
 
@@ -132,8 +126,7 @@
 
 <p>Why? <em>No reason, just my personal preference</em></p>
 
-<div class="highlight">
-<pre><span class="k">class</span> <span class="nc">SomeClass</span>
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">SomeClass</span>
 
   <span class="k">def</span> <span class="nf">public_method</span>
   <span class="k">end</span>
@@ -148,9 +141,7 @@
   <span class="k">def</span> <span class="nf">private_method</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>
 <code>protected</code> and <code>private</code> are surrounded by newlines</h4>
@@ -175,8 +166,7 @@
 
 <p>Why? <em>This makes it very clear that you are using <code>if..else..end</code> as a complex expression and not as a control structure</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Wrong</span>
+<div class="highlight"><pre><span class="c1"># Wrong</span>
 <span class="n">result</span> <span class="o">=</span> <span class="k">if</span> <span class="n">something?</span>
   <span class="ss">:foo</span>
 <span class="k">else</span>
@@ -189,9 +179,7 @@
          <span class="k">else</span>
             <span class="ss">:bar</span>
          <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h2>Naming</h2>
 
@@ -209,8 +197,7 @@
 
 <p>Why? <em>When there's no particular specific name for something, using its type makes it easy to remember what the object is</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Just use the classname</span>
+<div class="highlight"><pre><span class="c1"># Just use the classname</span>
 <span class="k">def</span> <span class="nf">routine</span>
   <span class="n">customer</span> <span class="o">=</span> <span class="no">Customer</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="mi">124</span><span class="p">)</span>
   <span class="n">customers</span> <span class="o">=</span> <span class="no">Customer</span><span class="o">.</span><span class="n">find_all_by_gender</span><span class="p">(</span><span class="s2">"M"</span><span class="p">)</span>
@@ -230,24 +217,19 @@
   <span class="n">minor_customers</span> <span class="o">=</span> <span class="no">Customer</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s1">'age &lt; ?'</span><span class="p">,</span><span class="mi">18</span><span class="p">)</span>
   <span class="c1"># tons more code</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>For procs and lambdas, use a verb as opposed to <code>foo_proc</code> or <code>foo_block</code>
 </h4>
 
 <p>Why? <em>Procs and lambdas are more like methods and thus should be verbs, since they do something</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Wrong; the variable has been needlessly "nounified" for no real benefit</span>
+<div class="highlight"><pre><span class="c1"># Wrong; the variable has been needlessly "nounified" for no real benefit</span>
 <span class="n">saver</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">save!</span> <span class="p">}</span>
 
 <span class="c1"># Correct; the variable, being a verb, is instantly recognizable as an action</span>
 <span class="n">save</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">save!</span> <span class="p">}</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h3>Methods</h3>
 
@@ -263,8 +245,7 @@
 
 <p>Why? <em>This calls out methods whose use should be carefully understood</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Mutates the object; dangerous on an otherwise immutable object</span>
+<div class="highlight"><pre><span class="c1"># Mutates the object; dangerous on an otherwise immutable object</span>
 <span class="k">def</span> <span class="nf">process!</span>
   <span class="vi">@processed</span> <span class="o">=</span> <span class="kp">true</span>
 <span class="k">end</span>
@@ -279,9 +260,7 @@
 <span class="k">def</span> <span class="nf">save!</span>
   <span class="k">raise</span> <span class="no">ValidationException</span> <span class="k">unless</span> <span class="nb">self</span><span class="o">.</span><span class="n">save</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h3>Classes And Modules</h3>
 
@@ -293,17 +272,14 @@
 
 <p>Why? <em>Ensures that classnames are understood everywhere used.</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Wrong; 'Base' is not an accurate classname</span>
+<div class="highlight"><pre><span class="c1"># Wrong; 'Base' is not an accurate classname</span>
 <span class="k">class</span> <span class="nc">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
 <span class="k">end</span>
 
 <span class="c1"># Good; using the class without its namespaced module doesn't remove any clarity</span>
 <span class="k">class</span> <span class="nc">Gateway</span><span class="o">::</span><span class="no">BraintreeGateway</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Class names should be nouns</h4>
 
@@ -332,8 +308,7 @@
 
 <p>Why? <em>This visually sets them off, and makes for a cleaner chaning syntax</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Wrong; calling a method on 'end' is awkward looking</span>
+<div class="highlight"><pre><span class="c1"># Wrong; calling a method on 'end' is awkward looking</span>
 <span class="n">male_teens</span> <span class="o">=</span> <span class="no">Customers</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">select</span> <span class="k">do</span> <span class="o">|</span><span class="n">customer</span><span class="o">|</span>
   <span class="n">customer</span><span class="o">.</span><span class="n">gender</span> <span class="o">==</span> <span class="ss">:male</span> 
 <span class="k">end</span><span class="o">.</span><span class="n">reject</span> <span class="k">do</span> <span class="o">|</span><span class="n">man</span><span class="o">|</span>
@@ -346,9 +321,7 @@
 <span class="p">}</span><span class="o">.</span><span class="n">reject</span> <span class="p">{</span> <span class="o">|</span><span class="n">man</span><span class="o">|</span>
   <span class="n">man</span><span class="o">.</span><span class="n">age</span> <span class="o">&gt;</span> <span class="mi">19</span> <span class="o">||</span> <span class="n">man</span><span class="o">.</span><span class="n">age</span> <span class="o">&lt;</span> <span class="mi">13</span>
 <span class="p">}</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Blocks that do not return a value or a value you will ignore use <code>do..end</code>
 </h4>
@@ -359,8 +332,7 @@
 
 <p>Why? <em>Parens visually set off the parameters, and reduce confusion about how Ruby will parse the line, making the code easier to maintain</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Given this code</span>
+<div class="highlight"><pre><span class="c1"># Given this code</span>
 <span class="k">class</span> <span class="nc">Person</span>
   <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span><span class="n">status</span><span class="p">)</span>
     <span class="c1"># ..</span>
@@ -376,9 +348,7 @@
 <span class="no">Person</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'Dave'</span><span class="p">,</span><span class="ss">:single</span><span class="p">)</span>
 <span class="c1"># Right; code is clear</span>
 <span class="no">Person</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'Dave'</span><span class="p">,</span><span class="n">wife</span> <span class="o">||</span> <span class="ss">:single</span><span class="p">)</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Do not use <code>else</code> with an <code>unless</code>
 </h4>
@@ -390,8 +360,7 @@
 
 <p>Why? <em><code>unless</code> is like putting a giant <code>!()</code> around your expression, so it becomes harder and harder to understand what is being tested by adding this.  It's not worth it</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Wrong; too hard to figure out</span>
+<div class="highlight"><pre><span class="c1"># Wrong; too hard to figure out</span>
 <span class="k">unless</span> <span class="n">person</span><span class="o">.</span><span class="n">valid?</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">person</span><span class="o">.</span><span class="n">from</span><span class="p">(</span><span class="s1">'US'</span><span class="p">)</span>
   <span class="c1"># doit</span>
 <span class="k">end</span>
@@ -405,23 +374,18 @@
 <span class="k">unless</span> <span class="n">valid_and_foreign?</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
   <span class="c1"># doit</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Use inline if/unless for 'early-exit' features only</h4>
 
 <p>Why? <em>Code can become hard to read when conditions are trailing and complex.  Early-exit conditions are generally simple and can benefit from this form</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Wrong; too complex</span>
+<div class="highlight"><pre><span class="c1"># Wrong; too complex</span>
 <span class="n">person</span><span class="o">.</span><span class="n">save</span> <span class="k">unless</span> <span class="n">person</span><span class="o">.</span><span class="n">from</span><span class="p">(</span><span class="s1">'US'</span><span class="p">)</span> <span class="o">||</span> <span class="n">person</span><span class="o">.</span><span class="n">age</span> <span class="o">&gt;</span> <span class="mi">18</span>
 
 <span class="c1"># OK; an early exit</span>
 <span class="k">raise</span> <span class="s2">"person may not be nil"</span> <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">nil?</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Do not catch <code>Exception</code> unless you <em>really</em> want to catch 'em all.</h4>
 
@@ -431,8 +395,7 @@
 
 <p>Why? <em>Intermediate objects increase the mental requirements for understanding a routine.  <code>tap</code> also creates a nice scope in which the object is being mutated; you will not forget to return the object when you change the code later</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Wrong</span>
+<div class="highlight"><pre><span class="c1"># Wrong</span>
 <span class="k">def</span> <span class="nf">eligible_person</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
   <span class="n">person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="nb">name</span><span class="p">)</span>
   <span class="n">person</span><span class="o">.</span><span class="n">update_eligibility</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
@@ -447,9 +410,7 @@
     <span class="n">person</span><span class="o">.</span><span class="n">save!</span>
   <span class="p">}</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Feel free to chain <code>Enumerable</code> calls using simple blocks instead of one complex block that does everything.</h4>
 
@@ -459,8 +420,7 @@
 
 <p>Why? <em>It's a lot clearer when you state exactly what you are testing; this makes it easier to change the code later, and avoids sticky issues like 0 and the empty string being truthy</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Wrong; intent is masked</span>
+<div class="highlight"><pre><span class="c1"># Wrong; intent is masked</span>
 <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">name</span>
   <span class="c1"># do it</span>
 <span class="k">end</span>
@@ -469,9 +429,7 @@
 <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">present?</span>
   <span class="c1"># do it</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>If your method returns true or false, be sure those are the only values returned.</h4>
 
@@ -493,8 +451,7 @@
 
 <p>Why? <em>This makes it easier to test the classes, but doesn't require Herculean efforts to instantiate classes at runtime:</em></p>
 
-<div class="highlight">
-<pre><span class="k">class</span> <span class="nc">PersonFormatter</span>
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">PersonFormatter</span>
   <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
     <span class="c1"># whatever</span>
   <span class="k">end</span>
@@ -536,9 +493,7 @@
     <span class="c1"># more code</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Don't make methods public unless they are part of the public interface</h4>
 
@@ -553,8 +508,7 @@
 
 <p>Why? <em>It's a convienient pattern to add macro-style methods to classes, and is used in Rails source, so will be easily recognizable by others</em></p>
 
-<div class="highlight">
-<pre><span class="k">module</span> <span class="nn">Helper</span>
+<div class="highlight"><pre><span class="k">module</span> <span class="nn">Helper</span>
   <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">included</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
     <span class="n">k</span><span class="o">.</span><span class="n">extend</span> <span class="no">ClassMethods</span>
   <span class="k">end</span>
@@ -572,9 +526,7 @@
 
   <span class="k">def</span> <span class="nf">doit</span><span class="p">;</span> <span class="nb">puts</span> <span class="nb">self</span><span class="o">.</span><span class="n">strat</span><span class="p">;</span> <span class="k">end</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Do not use ivars as a way of avoiding method parameters.</h4>
 
@@ -606,8 +558,7 @@
 
 <p>Why? <em>Don't restate what the code does, but DO explain why it works the way it does, especially if it does something in a suprising or weird way, from a business logic perspective</em></p>
 
-<div class="highlight">
-<pre><span class="c1">## Wrong; don't explain what the code does, we can read it</span>
+<div class="highlight"><pre><span class="c1">## Wrong; don't explain what the code does, we can read it</span>
 <span class="k">def</span> <span class="nf">minor?</span>
   <span class="c1"># Check if they are under 19</span>
   <span class="nb">self</span><span class="o">.</span><span class="n">age</span> <span class="o">&lt;</span> <span class="mi">19</span>
@@ -620,9 +571,7 @@
   <span class="c1"># ticket XYZ for a more detailed discussion</span>
   <span class="nb">self</span><span class="o">.</span><span class="n">age</span> <span class="o">&lt;</span> <span class="mi">19</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h3>Readme</h3>
 
@@ -660,8 +609,7 @@
 
 <p>Why? <em>Because it's jerky not to; there's no other way to know what they are</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Makes a request</span>
+<div class="highlight"><pre><span class="c1"># Makes a request</span>
 <span class="c1">#</span>
 <span class="c1"># url:: url to request</span>
 <span class="c1"># options:: options to control request:</span>
@@ -670,9 +618,7 @@
 <span class="c1">#           +:if_modified_since+:: Date for if-modified-since header, default nil</span>
 <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">options</span><span class="o">=</span><span class="p">{})</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Document a method's purpose if it's name alone cannot easily communicate it</h4>
 
@@ -714,8 +660,7 @@
 
 <p>Why? <em>This makes it clear what each section of the test is doing, which is crucial when tests get complex</em></p>
 
-<div class="highlight">
-<pre><span class="k">def</span> <span class="nf">test_something</span>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">test_something</span>
   <span class="c1"># Given</span>
   <span class="n">person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"Dave"</span><span class="p">,</span><span class="mi">38</span><span class="p">)</span>
 
@@ -725,16 +670,13 @@
   <span class="c1"># Then</span>
   <span class="n">assert</span> <span class="n">minor</span><span class="p">,</span><span class="s2">"Expected </span><span class="si">#{</span><span class="n">person</span><span class="o">.</span><span class="n">inspect</span><span class="si">}</span><span class="s2"> to be a minor"</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>For mocking, include a fourth part before 'When' so that the flow of the test is maintained</h4>
 
 <p>Why? <em>It's important to established what the mock expectations are, and thinking of it as seperate from a given helps the test read better.</em></p>
 
-<div class="highlight">
-<pre><span class="k">def</span> <span class="nf">test_something</span>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">test_something</span>
   <span class="c1"># Given</span>
   <span class="n">person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"Dave"</span><span class="p">,</span><span class="mi">38</span><span class="p">)</span>
 
@@ -747,16 +689,13 @@
   <span class="c1"># Then</span>
   <span class="n">assert</span> <span class="n">minor</span><span class="p">,</span><span class="s2">"Expected </span><span class="si">#{</span><span class="n">person</span><span class="o">.</span><span class="n">inspect</span><span class="si">}</span><span class="s2"> to be a minor"</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>If your only assertion is that mock expectations are met, include a comment indicating this</h4>
 
 <p>Why? <em>It's important to let others know your intent that the mock expectations ARE the test and that you just didn't forget an assert</em></p>
 
-<div class="highlight">
-<pre><span class="k">def</span> <span class="nf">test_something</span>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">test_something</span>
   <span class="c1"># Given</span>
   <span class="n">person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"Dave"</span><span class="p">,</span><span class="mi">38</span><span class="p">)</span>
 
@@ -768,16 +707,13 @@
 
   <span class="c1"># Then mock expectations should've been met</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>For block-based assertions, place the code inside a lambda to preserve the structure</h4>
 
 <p>Why? <em>Again, this preserves the flow of the test</em></p>
 
-<div class="highlight">
-<pre><span class="k">def</span> <span class="nf">test_something</span>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">test_something</span>
   <span class="c1"># Given</span>
   <span class="nb">name</span> <span class="o">=</span> <span class="s1">'Dave'</span>
 
@@ -788,9 +724,7 @@
   <span class="n">assert_difference</span><span class="p">(</span><span class="s1">'Person'</span><span class="p">,</span><span class="o">&amp;</span><span class="n">code</span><span class="p">)</span>
   <span class="n">assert_equal</span> <span class="nb">name</span><span class="p">,</span><span class="no">Person</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">name</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Avoid literals that aren't relevant to the test; abstract into a <code>any</code> method or <code>some</code> method, e.g. <code>some_int</code>
 </h4>
@@ -840,22 +774,18 @@
 
 <p>Why? <em>By lazily creating all routes for a resource, when you only need a few to be valid, you create misleading output for newcomers, and allow valid named route methods to be created that can only fail at runtime or in production.</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Wrong; our app only supports create and show</span>
+<div class="highlight"><pre><span class="c1"># Wrong; our app only supports create and show</span>
 <span class="n">resources</span> <span class="ss">:transactions</span>
 
 <span class="c1"># Right; rake routes reflects the reality of our app now</span>
 <span class="n">resources</span> <span class="ss">:transactions</span><span class="p">,</span> <span class="ss">:only</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:create</span><span class="p">,</span> <span class="ss">:show</span><span class="o">]</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Prefer exposing the exact objects views require rather than 'root' objects requiring deep traveral</h4>
 
 <p>Why? <em>When views navigate deep into object hierarchies, it becomes very difficult to understand what data the views really <em>do</em> require, and it makes refactoring anything in those object hierarchies incredibly difficult</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># A view for a person's credit cards requires the person's name, and a list of last-4, type, and expiration date of cards</span>
+<div class="highlight"><pre><span class="c1"># A view for a person's credit cards requires the person's name, and a list of last-4, type, and expiration date of cards</span>
 
 <span class="c1"># Wrong; the view must navigate through the person to get his credit cards and has</span>
 <span class="c1"># access to the entire person objects, which is not needed</span>
@@ -880,9 +810,7 @@
                    <span class="ss">:expiration_date</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="n">card</span><span class="o">.</span><span class="n">expiration_month</span><span class="p">,</span><span class="n">card</span><span class="o">.</span><span class="n">expiration_year</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s1">'/'</span><span class="p">))</span>
   <span class="p">}</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Do not create ivars unless they are to be shared with the views.</h4>
 
@@ -894,8 +822,7 @@
 
 <p>Why? <em>Hooks make your models very hard to use in different ways, and lock them to business rules that are likely not all that hard and fast.  They also make testing very difficult, as it becomes harder and harder to set up the correct state using objects that have excessive hooks on them.</em></p>
 
-<div class="highlight">
-<pre><span class="c1"># Wrong; we've hidden business logic behind a simple CRUD operation</span>
+<div class="highlight"><pre><span class="c1"># Wrong; we've hidden business logic behind a simple CRUD operation</span>
 <span class="k">class</span> <span class="nc">Person</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">after_save</span> <span class="ss">:update_facebook</span>
 
@@ -915,9 +842,7 @@
     <span class="k">end</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <h4>Validations should not be conditional</h4>
 
@@ -936,7 +861,7 @@
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
       </footer>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
     
   </body>
 </html>
