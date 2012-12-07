@@ -1,8 +1,8 @@
 ---
 - :rule: "2-space indent"
   :why: "this is standard across almost all Ruby code"
-- :rule: "Do not bother aligning arrows, equals, or colons.  If there are so many grouped together, consider restructuring your code"
-  :why: "Alignment requires extra work to maintain, and results in hard-to-understand diffs when alignment must change"
+- :rule: "For more than 2 groups of arrowed, equaled, or coloned lines (e.g. a hash or set of local variables), align the operators so that the code forms a 'table'"
+  :why: "Although it's extra work to maintain and can break diffs, I feel that the clarity and readability of this structure is worth it - the code is read many more times than changed"
 - :rule: "Avoid single-line methods"
   :why: "Single-line methods are harder to change when the method needs an additional line"
 - :rule: "Keep line lengths 80 characters or less unless doing so negatively impacts readability (e.g. for large string literals)"

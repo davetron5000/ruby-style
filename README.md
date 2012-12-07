@@ -1,9 +1,8 @@
 # Ruby Style Guide
 
-#### These rules should be broken if it increase code clarity or maintainability
+#### These rules may be broken if it increases code clarity or maintainability
 
-#### First and foremost, use the style of the code you are modifying
-
+#### Always default to using the style of the code you are modifying
 
 ## Files
 
@@ -46,9 +45,9 @@ Why? _Test dir is then sorted by classname, making it easy to visually scan or a
 Why? _this is standard across almost all Ruby code_
 
 
-#### Do not bother aligning arrows, equals, or colons.  If there are so many grouped together, consider restructuring your code
+#### For more than 2 groups of arrowed, equaled, or coloned lines (e.g. a hash or set of local variables), align the operators so that the code forms a 'table'
 
-Why? _Alignment requires extra work to maintain, and results in hard-to-understand diffs when alignment must change_
+Why? _Although it's extra work to maintain and can break diffs, I feel that the clarity and readability of this structure is worth it - the code is read many more times than changed_
 
 
 #### Avoid single-line methods
