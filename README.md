@@ -505,29 +505,38 @@ Why? _Public is the way to formally document the contract of your class.  Puttin
 Why? _Protected is used to allow subclasses to call non-public methods.  This implies a potentially complex type hierarchy, which is likely not correct for what you are doing._
 
 
-#### Know the `ClassMethods` pattern for sharing class methods via a module
+#### Avoid the `ClassMethods` pattern for sharing class methods via a module, since simple use of `extend` will do
 
-Why? _It's a convienient pattern to add macro-style methods to classes, and is used in Rails source, so will be easily recognizable by others_
+Why? _Although it was idiomatic in Rails, the whole idea of overriding `included` to call `extend` is a bit overkill.  The client code can simply use `extend`.  You *could* use the `InstanceMethods` concept to add instance level methods if you like. See [this article from Yehuda Katz](http://yehudakatz.com/2009/11/12/better-ruby-idioms/) for more info._
 
 ```ruby
 module Helper
-  def self.included(k)
-    k.extend ClassMethods
+  def has_strategy(strat)
+    cattr_accessor :strategy
+    # or self.class.send(:attr_accessor,:strategy) if not in Rails land
+    self.strategy = strat
+    include InstanceMethods
   end
-  module ClassMethods
-    def strategy(strat)
-      @strategy = strat
+
+  module InstanceMethods
+    def operate
+      case self.class.strategy
+      when :foo then puts "FOO!"
+      when :bar then puts "BAR!"
+      else
+        puts "Doing #{self.class.strategy}"
+      end
     end
   end
 end
 
 class UsesHelper
-  include Helper
+  extend Helper
 
-  strategy :foo
-
-  def doit; puts self.strat; end
+  has_strategy :foo
 end
+
+UsesHelper.new.operate
 ```
 
 #### Do not use ivars as a way of avoiding method parameters.
