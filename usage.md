@@ -7,7 +7,7 @@ If you like the guide in principle, but disagree with some of the rules, I reall
 1. Clone this repo
 2. `bundle install`
 3. Tweak files in `guide` and `etc`
-4. `bin/guide > README.md`
+4. `bin/guide README.md`
 5. Push to github
 6. (optional) Use Github's fancy-pants site generator to make it pretty.
 
