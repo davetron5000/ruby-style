@@ -504,28 +504,37 @@
 
 <p>Why? <em>Protected is used to allow subclasses to call non-public methods.  This implies a potentially complex type hierarchy, which is likely not correct for what you are doing.</em></p>
 
-<h4>Know the <code>ClassMethods</code> pattern for sharing class methods via a module</h4>
+<h4>Avoid the <code>ClassMethods</code> pattern for sharing class methods via a module, since simple use of <code>extend</code> will do</h4>
 
-<p>Why? <em>It's a convienient pattern to add macro-style methods to classes, and is used in Rails source, so will be easily recognizable by others</em></p>
+<p>Why? <em>Although it was idiomatic in Rails, the whole idea of overriding <code>included</code> to call <code>extend</code> is a bit overkill.  The client code can simply use <code>extend</code>.  You <em>could</em> use the <code>InstanceMethods</code> concept to add instance level methods if you like. See <a href="http://yehudakatz.com/2009/11/12/better-ruby-idioms/">this article from Yehuda Katz</a> for more info.</em></p>
 
 <div class="highlight"><pre><span class="k">module</span> <span class="nn">Helper</span>
-  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">included</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-    <span class="n">k</span><span class="o">.</span><span class="n">extend</span> <span class="no">ClassMethods</span>
+  <span class="k">def</span> <span class="nf">has_strategy</span><span class="p">(</span><span class="n">strat</span><span class="p">)</span>
+    <span class="n">cattr_accessor</span> <span class="ss">:strategy</span>
+    <span class="c1"># or self.class.send(:attr_accessor,:strategy) if not in Rails land</span>
+    <span class="nb">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strat</span>
+    <span class="kp">include</span> <span class="no">InstanceMethods</span>
   <span class="k">end</span>
-  <span class="k">module</span> <span class="nn">ClassMethods</span>
-    <span class="k">def</span> <span class="nf">strategy</span><span class="p">(</span><span class="n">strat</span><span class="p">)</span>
-      <span class="vi">@strategy</span> <span class="o">=</span> <span class="n">strat</span>
+
+  <span class="k">module</span> <span class="nn">InstanceMethods</span>
+    <span class="k">def</span> <span class="nf">operate</span>
+      <span class="k">case</span> <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">strategy</span>
+      <span class="k">when</span> <span class="ss">:foo</span> <span class="k">then</span> <span class="nb">puts</span> <span class="s2">"FOO!"</span>
+      <span class="k">when</span> <span class="ss">:bar</span> <span class="k">then</span> <span class="nb">puts</span> <span class="s2">"BAR!"</span>
+      <span class="k">else</span>
+        <span class="nb">puts</span> <span class="s2">"Doing </span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">strategy</span><span class="si">}</span><span class="s2">"</span>
+      <span class="k">end</span>
     <span class="k">end</span>
   <span class="k">end</span>
 <span class="k">end</span>
 
 <span class="k">class</span> <span class="nc">UsesHelper</span>
-  <span class="kp">include</span> <span class="no">Helper</span>
+  <span class="kp">extend</span> <span class="no">Helper</span>
 
-  <span class="n">strategy</span> <span class="ss">:foo</span>
-
-  <span class="k">def</span> <span class="nf">doit</span><span class="p">;</span> <span class="nb">puts</span> <span class="nb">self</span><span class="o">.</span><span class="n">strat</span><span class="p">;</span> <span class="k">end</span>
+  <span class="n">has_strategy</span> <span class="ss">:foo</span>
 <span class="k">end</span>
+
+<span class="no">UsesHelper</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">operate</span>
 </pre></div>
 
 <h4>Do not use ivars as a way of avoiding method parameters.</h4>
@@ -823,7 +832,7 @@
 <p>Why? <em>Hooks make your models very hard to use in different ways, and lock them to business rules that are likely not all that hard and fast.  They also make testing very difficult, as it becomes harder and harder to set up the correct state using objects that have excessive hooks on them.</em></p>
 
 <div class="highlight"><pre><span class="c1"># Wrong; we've hidden business logic behind a simple CRUD operation</span>
-<span class="k">class</span> <span class="nc">Person</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+<span class="k">class</span> <span class="nc">Person</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
   <span class="n">after_save</span> <span class="ss">:update_facebook</span>
 
 <span class="kp">private</span>
@@ -834,7 +843,7 @@
 <span class="k">end</span>
 
 <span class="c1"># Better; we have a method that says what it does</span>
-<span class="k">class</span> <span class="nc">Person</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+<span class="k">class</span> <span class="nc">Person</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
 
   <span class="k">def</span> <span class="nf">save_and_update_facebook</span>
     <span class="k">if</span> <span class="n">save</span>
