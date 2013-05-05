@@ -54,7 +54,7 @@
       code = lambda { Person.create(:name => name) }
 
       # Then
-      assert_difference('Person',&code)
+      assert_difference('Person.count',&code)
       assert_equal name,Person.last.name
     end
 - :rule: "Avoid literals that aren't relevant to the test; abstract into a `any` method or `some` method, e.g. `some_int`"
