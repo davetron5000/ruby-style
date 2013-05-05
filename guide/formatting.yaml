@@ -7,7 +7,7 @@
   :why: "Single-line methods are harder to change when the method needs an additional line"
 - :rule: "Keep line lengths 80 characters or less unless doing so negatively impacts readability (e.g. for large string literals)"
   :why: "Excessively long lines can be very difficult to read and understand; a low line length encourages keeping things simple"
-- :rule: "Literal arrays or hashes should have a comma after *every* element, includingn the last one"
+- :rule: "Literal arrays or hashes should have a comma after *every* element, including the last one"
   :why: "This makes it easier to add elements and reorder elements without having to worry about missing commas"
 - :rule: "For 'options-hash' calls, align keys across multiple lines, one per line, e.g."
   :why: "This makes it easier to read and modify the options sent to the method"
@@ -51,9 +51,9 @@
   :why: "Visual clearance"
 - :rule: "A newline after `end` unless it's the string of `end`s for the end of the class/module"
   :why: "I don't get much value from visual clearance for the end blocks that 'close' a class or module"
-- :rule: "class methods should be defined via `def self.class_name` and not inside a `class << self`"
+- :rule: "Class methods should be defined via `def self.class_name` and not inside a `class << self`"
   :why: "This reduces errors caused by moving methods around, and also doesn't require you to scroll up in the class to determine what type of method it is; you can see it instantly"
-- :rule: "when using the return value of an `if` expression, indent the `else` and `end` with the `if`:"
+- :rule: "When using the return value of an `if` expression, indent the `else` and `end` with the `if`:"
   :why: "This makes it very clear that you are using `if..else..end` as a complex expression and not as a control structure"
   :example: |
     # Wrong

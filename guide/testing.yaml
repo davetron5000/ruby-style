@@ -64,7 +64,7 @@
 - :rule: "Extract setup and assertions that are the same *by design* into helper methods"
   :why: "If you are running a different test under the exact same conditions as another test, extract that duplicative code into a helper.  Similarly, if you are conducting a different test that should have the same outcome, extract those assertions to a helper."
 - :rule: "Leave repeated code that is the same *by happenstance*"
-  :why: "This sort of duplication is OK becauser they code is only the same by happenstance, and may diverge as the code matures.  By leaving it seperate, it's easier to change"
+  :why: "This sort of duplication is OK because the code is only the same by happenstance, and may diverge as the code matures.  By leaving it seperate, it's easier to change"
   :example: ""
 - :rule: "The 'When' part of your tests should ideally use the public API of the class under test."
   :why: "Some RSpec constructs assert things about the class under test without calling its public API, e.g. `person.should be_valid`.  This goes against the spirit of TDD, and requires the reader to make a mental transaction between the testing DSL and the class' method, with no discernable benefit."

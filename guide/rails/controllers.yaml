@@ -1,6 +1,6 @@
 ---
 - :rule: "There should be very few `if` statements; controllers should be as dumb as possible"
-  :why: "`if` statements usually imply business logic, which does not belong in controllers.  The logic in the controller should be mainly concerned with send the correct response to the user."
+  :why: "`if` statements usually imply business logic, which does not belong in controllers.  The logic in the controller should be mainly concerned with sending the correct response to the user."
   :example: ""
 - :rule: "Avoid excessive filters, or filters that are highly conditional"
   :why: "When the number of filters increases, it becomes harder and harder to know what code is executing and in what order.  Further, when filters set instance variables, it becomes increasingly difficult to understand where those variables are being set, and the filters become very order-specific.  Finally, conditional filters, or filters used on only one controller method increase complexity beyond the point of utility"
@@ -19,7 +19,7 @@
     # A view for a person's credit cards requires the person's name, and a list of last-4, type, and expiration date of cards
 
     # Wrong; the view must navigate through the person to get his credit cards and has
-    # access to the entire person objects, which is not needed
+    # access to the entire person object, which is not needed
     def show
       @person = Person.find(params[:person_id])
     end

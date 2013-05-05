@@ -87,6 +87,6 @@
 
 - :rule: "Do not use ivars as a way of avoiding method parameters."
   :why: "Instance variables are a form of global data, and your routines' complexity increases when their input comes from multiple sources.  If the instance variables control flow or logic, pass them in as parameters"
-- :rule: "private methods should be used to make public methods clear; they should avoid reliance on ivars if at-all possible"
+- :rule: "Private methods should be used to make public methods clear; they should avoid reliance on ivars if at all possible"
   :why: "Private methods that do not rely on instance variables can very easily be extracted to new classes when things get compledx"
-- :rule: "private methods calling more private methods might indicate a second class is hiding inside this class"
+- :rule: "Private methods calling more private methods might indicate a second class is hiding inside this class"
