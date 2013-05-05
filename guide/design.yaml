@@ -60,7 +60,7 @@
     module Helper
       def has_strategy(strat)
         cattr_accessor :strategy
-        # or self.class.send(:attr_accessor,:strategy) if not in Rails land
+        # or singleton_class.send(:attr_accessor,:strategy) if not in Rails land
         self.strategy = strat
         include InstanceMethods
       end
