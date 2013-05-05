@@ -1,5 +1,5 @@
 ---
-- :rule: "There should be a README that includes:"
+- :rule: "There should be a README."
   :why: "Because a README is a nice way to explain what your code is/does"
 - :rule: "The README should explain what the library/app does, in one line"
   :why: "Summarizing things in one line is helpful"
@@ -7,7 +7,7 @@
   :why: "Because not everyone knows what needs to be done, even if it's just `gem install`"
 - :rule: "The README should show the simplest example possible of using the library/ap"
   :why: "This, along with the description allows someone to understand your library/app in under a minute"
-- :rule: "A more detailed overview, pointing to key classes or modules"
+- :rule: "The README should include a more detailed overview, pointing to key classes or modules"
   :why: "When rendered as RDoc, these classes link to where the user should start reading to get a deeper perspective"
 - :rule: "Additional info for developing with the code"
   :why: "If you want contributions, developers need to know how to work with your code"

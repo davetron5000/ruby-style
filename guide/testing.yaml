@@ -13,7 +13,7 @@
       assert minor,"Expected #{person.inspect} to be a minor"
     end
 - :rule: "For mocking, include a fourth part before 'When' so that the flow of the test is maintained"
-  :why: "It's important to established what the mock expectations are, and thinking of it as seperate from a given helps the test read better."
+  :why: "It's important to establish what the mock expectations are, and thinking of them as separate from the given helps the test read better."
   :example: |
     def test_something
       # Given
@@ -62,7 +62,7 @@
 - :rule: "For literals that *are* relevant to the test, do not repeat them in a test"
   :why: "Just like magic strings are bad in real code, they are in test code.  Plus it codifies that the values are the same by design and not just by happenstance"
 - :rule: "Extract setup and assertions that are the same *by design* into helper methods"
-  :why: "If you are running a different test under the exact same conditions as another test, extract that duplicative code into a helper.  Similarly, if you are conducting a different test that should have the same outcome, extract those assertions to a helper."
+  :why: "If you are running a different test under the exact same conditions as another test, extract that duplicated code into a helper.  Similarly, if you are conducting a different test that should have the same outcome, extract those assertions to a helper."
 - :rule: "Leave repeated code that is the same *by happenstance*"
   :why: "This sort of duplication is OK becauser they code is only the same by happenstance, and may diverge as the code matures.  By leaving it seperate, it's easier to change"
   :example: ""
