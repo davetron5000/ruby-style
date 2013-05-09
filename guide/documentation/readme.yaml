@@ -5,7 +5,7 @@
   :why: "Summarizing things in one line is helpful"
 - :rule: "The README should explain how to install your app/code"
   :why: "Because not everyone knows what needs to be done, even if it's just `gem install`"
-- :rule: "The README should show the simplest example possible of using the library/ap"
+- :rule: "The README should show the simplest example possible of using the library/app"
   :why: "This, along with the description allows someone to understand your library/app in under a minute"
 - :rule: "A more detailed overview, pointing to key classes or modules"
   :why: "When rendered as RDoc, these classes link to where the user should start reading to get a deeper perspective"

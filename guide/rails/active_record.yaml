@@ -24,7 +24,7 @@
     end
 
 - :rule: "Validations should not be conditional"
-  :why: "Validations that are not always applicable make it very hard to modify objects and enhance them, because it becomes increasingly difficult tor understand what a valid objects really is.  Further, it becomes very difficult to set up objects in a particular state for a given test if there are a lot of conditonal validations"
+  :why: "Validations that are not always applicable make it very hard to modify objects and enhance them, because it becomes increasingly difficult to understand what a valid object really is.  Further, it becomes very difficult to set up objects in a particular state for a given test if there are a lot of conditonal validations"
 - :rule: "Use database constraints to enforce valid data in the database"
   :why: "The database is the only place that can truly ensure various constraints, such as uniqueness.  Constraints are incredibly useful for making sure that, regardless of bugs in your code, your data will be clean."
 - :rule: "AR objects should be as dumb as possible; only derived values should be new methods"

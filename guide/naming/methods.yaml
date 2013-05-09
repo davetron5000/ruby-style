@@ -3,7 +3,7 @@
   :why: "Since Ruby allows the '=' form, using 'get' or 'set' in the names just adds noise"
   :example: ""
 - :rule: "Boolean methods end in a question mark"
-  :why: "This allows methods that can used in expressions to clearly stand out and makes code more fluent"
+  :why: "This allows methods that can be used in expressions to clearly stand out and makes code more fluent"
   :example: ""
 - :rule: "Dangerous methods end in a bang."
   :why: "This calls out methods whose use should be carefully understood"
