@@ -34,7 +34,7 @@
     # Right; the ivars represent what the view needs AND contain only what the view needs.
     # You may wish to use a more sophisticated "presenter" pattern instead of OpenStruct
     def show
-      @person_name = Person.find(params[:person_id].full_name
+      @person_name = Person.find(params[:person_id]).full_name
       @credit_cards = @person.credit_cards.map { |card|
         OpenStruct.new(:last_four => card.last_four, 
                        :card_type => card.card_type,
