@@ -16,7 +16,7 @@
                                       :blah => "quux",
                                       :bar => 42)
 - :rule: "When declaring attributes with `attr_reader` or `attr_accessor`, put one per line"
-  :why: "This makes it easier to add new attributres without creating complex diffs.  It also affords documenting what the attributes represent"
+  :why: "This makes it easier to add new attributes without creating complex diffs.  It also documents what the attributes represent"
   :example: |
     # Wrong; hard to modify
     attr_accessor :first_name, :last_name, :gender
