@@ -60,7 +60,7 @@ Why? _Single-line methods are harder to change when the method needs an addition
 Why? _Excessively long lines can be very difficult to read and understand; a low line length encourages keeping things simple_
 
 
-#### Literal arrays or hashes should have a comma after *every* element, includingn the last one
+#### Literal arrays or hashes should have a comma after *every* element, including the last one
 
 Why? _This makes it easier to add elements and reorder elements without having to worry about missing commas_
 
@@ -77,7 +77,7 @@ some_call(non_option1,non_option2,:foo => "bar",
 
 #### When declaring attributes with `attr_reader` or `attr_accessor`, put one per line
 
-Why? _This makes it easier to add new attributres without creating complex diffs.  It also affords documenting what the attributes represent_
+Why? _This makes it easier to add new attributes without creating complex diffs.  It also documents what the attributes represent_
 
 ```ruby
 # Wrong; hard to modify
@@ -131,12 +131,12 @@ Why? _Visual clearance_
 Why? _I don't get much value from visual clearance for the end blocks that 'close' a class or module_
 
 
-#### class methods should be defined via `def self.class_name` and not inside a `class << self`
+#### Class methods should be defined via `def self.class_name` and not inside a `class << self`
 
 Why? _This reduces errors caused by moving methods around, and also doesn't require you to scroll up in the class to determine what type of method it is; you can see it instantly_
 
 
-#### when using the return value of an `if` expression, indent the `else` and `end` with the `if`:
+#### When using the return value of an `if` expression, indent the `else` and `end` with the `if`:
 
 Why? _This makes it very clear that you are using `if..else..end` as a complex expression and not as a control structure_
 
@@ -218,7 +218,7 @@ Why? _Since Ruby allows the '=' form, using 'get' or 'set' in the names just add
 
 #### Boolean methods end in a question mark
 
-Why? _This allows methods that can used in expressions to clearly stand out and makes code more fluent_
+Why? _This allows methods that can be used in expressions to clearly stand out and makes code more fluent_
 
 
 #### Dangerous methods end in a bang.
@@ -313,7 +313,7 @@ male_teens = Customers.all.select { |customer|
 
 #### Blocks that do not return a value or a value you will ignore use `do..end`
 
-Why? _These blocks are more control-structures, so `do..end` is more natural.  It sets them off from blocks that produce a useful value_
+Why? _These blocks are more like control structures, so `do..end` is more natural.  It sets them off from blocks that produce a useful value_
 
 
 #### Always use parens when calling methods with arguments unless you are coding in a heavy 'DSL Style' bit of code
@@ -513,7 +513,7 @@ Why? _Although it was idiomatic in Rails, the whole idea of overriding `included
 module Helper
   def has_strategy(strat)
     cattr_accessor :strategy
-    # or self.class.send(:attr_accessor,:strategy) if not in Rails land
+    # or singleton_class.send(:attr_accessor,:strategy) if not in Rails land
     self.strategy = strat
     include InstanceMethods
   end
@@ -544,12 +544,12 @@ UsesHelper.new.operate
 Why? _Instance variables are a form of global data, and your routines' complexity increases when their input comes from multiple sources.  If the instance variables control flow or logic, pass them in as parameters_
 
 
-#### private methods should be used to make public methods clear; they should avoid reliance on ivars if at-all possible
+#### Private methods should be used to make public methods clear; they should avoid reliance on ivars if at all possible
 
 Why? _Private methods that do not rely on instance variables can very easily be extracted to new classes when things get compledx_
 
 
-#### private methods calling more private methods might indicate a second class is hiding inside this class
+#### Private methods calling more private methods might indicate a second class is hiding inside this class
 
 
 
@@ -594,7 +594,7 @@ end
 
 ### Readme
 
-#### There should be a README that includes:
+#### There should be a README.
 
 Why? _Because a README is a nice way to explain what your code is/does_
 
@@ -609,12 +609,12 @@ Why? _Summarizing things in one line is helpful_
 Why? _Because not everyone knows what needs to be done, even if it's just `gem install`_
 
 
-#### The README should show the simplest example possible of using the library/ap
+#### The README should show the simplest example possible of using the library/app
 
 Why? _This, along with the description allows someone to understand your library/app in under a minute_
 
 
-#### A more detailed overview, pointing to key classes or modules
+#### The README should include a more detailed overview, pointing to key classes or modules
 
 Why? _When rendered as RDoc, these classes link to where the user should start reading to get a deeper perspective_
 
@@ -647,19 +647,19 @@ def request(url,options={})
 end
 ```
 
-#### Document a method's purpose if it's name alone cannot easily communicate it
+#### Document a method's purpose if its name alone cannot easily communicate it
 
 Why? _Good method names are preferred, but if it's somewhat complex, add a bit more about what the method does_
 
 
 #### Document the meaning of parameter types if their name alone isn't enough to communicate it
 
-Why? _Again, the parameter names should be meaninful, but if they don't full explain things, throws us a bone_
+Why? _Again, the parameter names should be meaningful, but if they don't fully explain things, throws us a bone_
 
 
 #### Do not document default parameter values
 
-Why? _These valuers show up in rdoc, so restating them is just a maintenance issue_
+Why? _These values show up in rdoc, so restating them is just a maintenance issue_
 
 
 #### Document the types of each attribute created with an `attr_` method
@@ -710,7 +710,7 @@ end
 
 #### For mocking, include a fourth part before 'When' so that the flow of the test is maintained
 
-Why? _It's important to established what the mock expectations are, and thinking of it as seperate from a given helps the test read better._
+Why? _It's important to establish what the mock expectations are, and thinking of them as separate from the given helps the test read better._
 
 ```ruby
 def test_something
@@ -760,7 +760,7 @@ def test_something
   code = lambda { Person.create(:name => name) }
 
   # Then
-  assert_difference('Person',&code)
+  assert_difference('Person.count',&code)
   assert_equal name,Person.last.name
 end
 ```
@@ -777,12 +777,12 @@ Why? _Just like magic strings are bad in real code, they are in test code.  Plus
 
 #### Extract setup and assertions that are the same *by design* into helper methods
 
-Why? _If you are running a different test under the exact same conditions as another test, extract that duplicative code into a helper.  Similarly, if you are conducting a different test that should have the same outcome, extract those assertions to a helper._
+Why? _If you are running a different test under the exact same conditions as another test, extract that duplicated code into a helper.  Similarly, if you are conducting a different test that should have the same outcome, extract those assertions to a helper._
 
 
 #### Leave repeated code that is the same *by happenstance*
 
-Why? _This sort of duplication is OK becauser they code is only the same by happenstance, and may diverge as the code matures.  By leaving it seperate, it's easier to change_
+Why? _This sort of duplication is OK because the code is only the same by happenstance, and may diverge as the code matures.  By leaving it seperate, it's easier to change_
 
 
 #### The 'When' part of your tests should ideally use the public API of the class under test.
@@ -806,7 +806,7 @@ Why? _As an app matures, the fixtures or factories become incredibly brittle and
 
 #### There should be very few `if` statements; controllers should be as dumb as possible
 
-Why? _`if` statements usually imply business logic, which does not belong in controllers.  The logic in the controller should be mainly concerned with send the correct response to the user._
+Why? _`if` statements usually imply business logic, which does not belong in controllers.  The logic in the controller should be mainly concerned with sending the correct response to the user._
 
 
 #### Avoid excessive filters, or filters that are highly conditional
@@ -834,7 +834,7 @@ Why? _When views navigate deep into object hierarchies, it becomes very difficul
 # A view for a person's credit cards requires the person's name, and a list of last-4, type, and expiration date of cards
 
 # Wrong; the view must navigate through the person to get his credit cards and has
-# access to the entire person objects, which is not needed
+# access to the entire person object, which is not needed
 def show
   @person = Person.find(params[:person_id])
 end
@@ -849,7 +849,7 @@ end
 # Right; the ivars represent what the view needs AND contain only what the view needs.
 # You may wish to use a more sophisticated "presenter" pattern instead of OpenStruct
 def show
-  @person_name = Person.find(params[:person_id].full_name
+  @person_name = Person.find(params[:person_id]).full_name
   @credit_cards = @person.credit_cards.map { |card|
     OpenStruct.new(:last_four => card.last_four, 
                    :card_type => card.card_type,
@@ -894,7 +894,7 @@ end
 
 #### Validations should not be conditional
 
-Why? _Validations that are not always applicable make it very hard to modify objects and enhance them, because it becomes increasingly difficult tor understand what a valid objects really is.  Further, it becomes very difficult to set up objects in a particular state for a given test if there are a lot of conditonal validations_
+Why? _Validations that are not always applicable make it very hard to modify objects and enhance them, because it becomes increasingly difficult to understand what a valid object really is.  Further, it becomes very difficult to set up objects in a particular state for a given test if there are a lot of conditonal validations_
 
 
 #### Use database constraints to enforce valid data in the database
@@ -904,6 +904,6 @@ Why? _The database is the only place that can truly ensure various constraints, 
 
 #### AR objects should be as dumb as possible; only derived values should be new methods
 
-Why? _It may be tempting to add business logic to your models.  This instanvce violates the single responsiblity principal, but it also makes the classes harder and harder to understand, test, and modify.  Treat your modesl as dumb structs with persistence, and put all other concerns on other classes.  Do not just mix in a bunch of modules._
+Why? _It may be tempting to add business logic to your models, but this violates the single responsibility principle, and makes the classes harder and harder to understand, test, and modify.  Treat your models as dumb structs with persistence, and put all other concerns on other classes.  Do not just mix in a bunch of modules._
 
 
