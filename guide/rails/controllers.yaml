@@ -43,4 +43,4 @@
     end
    
 - :rule: "Do not create ivars unless they are to be shared with the views."
-  :why: "Using instance variables to avoid passing parameters is lazy and creates complex and hard-to-understand code.  In a controller, instance variables are special: they represent the data passed to the views, and that's all they should be used for."
+  :why: "Controllers are special types of classes.  You don't instantiate them, and the don't hold state.  ivars in a controller are *only* for passing data to a view.  If you need to pass data to prive methods, use method arguments."
