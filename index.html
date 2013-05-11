@@ -90,7 +90,7 @@
 
 <p>Why? <em>Excessively long lines can be very difficult to read and understand; a low line length encourages keeping things simple</em></p>
 
-<h4>Literal arrays or hashes should have a comma after <em>every</em> element, includingn the last one</h4>
+<h4>Literal arrays or hashes should have a comma after <em>every</em> element, including the last one</h4>
 
 <p>Why? <em>This makes it easier to add elements and reorder elements without having to worry about missing commas</em></p>
 
@@ -105,7 +105,7 @@
 
 <h4>When declaring attributes with <code>attr_reader</code> or <code>attr_accessor</code>, put one per line</h4>
 
-<p>Why? <em>This makes it easier to add new attributres without creating complex diffs.  It also affords documenting what the attributes represent</em></p>
+<p>Why? <em>This makes it easier to add new attributes without creating complex diffs.  It also documents what the attributes represent</em></p>
 
 <div class="highlight"><pre><span class="c1"># Wrong; hard to modify</span>
 <span class="kp">attr_accessor</span> <span class="ss">:first_name</span><span class="p">,</span> <span class="ss">:last_name</span><span class="p">,</span> <span class="ss">:gender</span>
@@ -157,12 +157,12 @@
 
 <p>Why? <em>I don't get much value from visual clearance for the end blocks that 'close' a class or module</em></p>
 
-<h4>class methods should be defined via <code>def self.class_name</code> and not inside a <code>class &lt;&lt; self</code>
+<h4>Class methods should be defined via <code>def self.class_name</code> and not inside a <code>class &lt;&lt; self</code>
 </h4>
 
 <p>Why? <em>This reduces errors caused by moving methods around, and also doesn't require you to scroll up in the class to determine what type of method it is; you can see it instantly</em></p>
 
-<h4>when using the return value of an <code>if</code> expression, indent the <code>else</code> and <code>end</code> with the <code>if</code>:</h4>
+<h4>When using the return value of an <code>if</code> expression, indent the <code>else</code> and <code>end</code> with the <code>if</code>:</h4>
 
 <p>Why? <em>This makes it very clear that you are using <code>if..else..end</code> as a complex expression and not as a control structure</em></p>
 
@@ -239,7 +239,7 @@
 
 <h4>Boolean methods end in a question mark</h4>
 
-<p>Why? <em>This allows methods that can used in expressions to clearly stand out and makes code more fluent</em></p>
+<p>Why? <em>This allows methods that can be used in expressions to clearly stand out and makes code more fluent</em></p>
 
 <h4>Dangerous methods end in a bang.</h4>
 
@@ -323,10 +323,10 @@
 <span class="p">}</span>
 </pre></div>
 
-<h4>Blocks that do not return a value or a value you will ignore use <code>do..end</code>
+<h4>Blocks that do not return a value, return a value you will ignore, or represent a method definition use <code>do..end</code>
 </h4>
 
-<p>Why? <em>These blocks are more control-structures, so <code>do..end</code> is more natural.  It sets them off from blocks that produce a useful value</em></p>
+<p>Why? <em>These blocks are more like control structures or methods, so <code>do..end</code> is more natural.  It sets them off from blocks that produce a useful value</em></p>
 
 <h4>Always use parens when calling methods with arguments unless you are coding in a heavy 'DSL Style' bit of code</h4>
 
@@ -483,7 +483,7 @@
 <span class="c1"># Correct; Option 2 - setter injection with a sensible default</span>
 <span class="k">class</span> <span class="nc">View</span>
   <span class="kp">attr_writer</span> <span class="ss">:person_formatter</span>
-  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">person_formatter</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">initialize</span>
     <span class="vi">@person_formatter</span> <span class="o">=</span> <span class="no">PersonFormatter</span><span class="o">.</span><span class="n">new</span>
   <span class="k">end</span>
 
@@ -511,7 +511,7 @@
 <div class="highlight"><pre><span class="k">module</span> <span class="nn">Helper</span>
   <span class="k">def</span> <span class="nf">has_strategy</span><span class="p">(</span><span class="n">strat</span><span class="p">)</span>
     <span class="n">cattr_accessor</span> <span class="ss">:strategy</span>
-    <span class="c1"># or self.class.send(:attr_accessor,:strategy) if not in Rails land</span>
+    <span class="c1"># or singleton_class.send(:attr_accessor,:strategy) if not in Rails land</span>
     <span class="nb">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strat</span>
     <span class="kp">include</span> <span class="no">InstanceMethods</span>
   <span class="k">end</span>
@@ -541,11 +541,11 @@
 
 <p>Why? <em>Instance variables are a form of global data, and your routines' complexity increases when their input comes from multiple sources.  If the instance variables control flow or logic, pass them in as parameters</em></p>
 
-<h4>private methods should be used to make public methods clear; they should avoid reliance on ivars if at-all possible</h4>
+<h4>Private methods should be used to make public methods clear; they should avoid reliance on ivars if at all possible</h4>
 
 <p>Why? <em>Private methods that do not rely on instance variables can very easily be extracted to new classes when things get compledx</em></p>
 
-<h4>private methods calling more private methods might indicate a second class is hiding inside this class</h4>
+<h4>Private methods calling more private methods might indicate a second class is hiding inside this class</h4>
 
 <h2>Documentation</h2>
 
@@ -584,7 +584,7 @@
 
 <h3>Readme</h3>
 
-<h4>There should be a README that includes:</h4>
+<h4>There should be a README.</h4>
 
 <p>Why? <em>Because a README is a nice way to explain what your code is/does</em></p>
 
@@ -596,11 +596,11 @@
 
 <p>Why? <em>Because not everyone knows what needs to be done, even if it's just <code>gem install</code></em></p>
 
-<h4>The README should show the simplest example possible of using the library/ap</h4>
+<h4>The README should show the simplest example possible of using the library/app</h4>
 
 <p>Why? <em>This, along with the description allows someone to understand your library/app in under a minute</em></p>
 
-<h4>A more detailed overview, pointing to key classes or modules</h4>
+<h4>The README should include a more detailed overview, pointing to key classes or modules</h4>
 
 <p>Why? <em>When rendered as RDoc, these classes link to where the user should start reading to get a deeper perspective</em></p>
 
@@ -629,17 +629,17 @@
 <span class="k">end</span>
 </pre></div>
 
-<h4>Document a method's purpose if it's name alone cannot easily communicate it</h4>
+<h4>Document a method's purpose if its name alone cannot easily communicate it</h4>
 
 <p>Why? <em>Good method names are preferred, but if it's somewhat complex, add a bit more about what the method does</em></p>
 
 <h4>Document the meaning of parameter types if their name alone isn't enough to communicate it</h4>
 
-<p>Why? <em>Again, the parameter names should be meaninful, but if they don't full explain things, throws us a bone</em></p>
+<p>Why? <em>Again, the parameter names should be meaningful, but if they don't fully explain things, throws us a bone</em></p>
 
 <h4>Do not document default parameter values</h4>
 
-<p>Why? <em>These valuers show up in rdoc, so restating them is just a maintenance issue</em></p>
+<p>Why? <em>These values show up in rdoc, so restating them is just a maintenance issue</em></p>
 
 <h4>Document the types of each attribute created with an <code>attr_</code> method</h4>
 
@@ -683,7 +683,7 @@
 
 <h4>For mocking, include a fourth part before 'When' so that the flow of the test is maintained</h4>
 
-<p>Why? <em>It's important to established what the mock expectations are, and thinking of it as seperate from a given helps the test read better.</em></p>
+<p>Why? <em>It's important to establish what the mock expectations are, and thinking of them as separate from the given helps the test read better.</em></p>
 
 <div class="highlight"><pre><span class="k">def</span> <span class="nf">test_something</span>
   <span class="c1"># Given</span>
@@ -730,7 +730,7 @@
   <span class="n">code</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="no">Person</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="nb">name</span><span class="p">)</span> <span class="p">}</span>
 
   <span class="c1"># Then</span>
-  <span class="n">assert_difference</span><span class="p">(</span><span class="s1">'Person'</span><span class="p">,</span><span class="o">&amp;</span><span class="n">code</span><span class="p">)</span>
+  <span class="n">assert_difference</span><span class="p">(</span><span class="s1">'Person.count'</span><span class="p">,</span><span class="o">&amp;</span><span class="n">code</span><span class="p">)</span>
   <span class="n">assert_equal</span> <span class="nb">name</span><span class="p">,</span><span class="no">Person</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">name</span>
 <span class="k">end</span>
 </pre></div>
@@ -746,12 +746,12 @@
 
 <h4>Extract setup and assertions that are the same <em>by design</em> into helper methods</h4>
 
-<p>Why? <em>If you are running a different test under the exact same conditions as another test, extract that duplicative code into a helper.  Similarly, if you are conducting a different test that should have the same outcome, extract those assertions to a helper.</em></p>
+<p>Why? <em>If you are running a different test under the exact same conditions as another test, extract that duplicated code into a helper.  Similarly, if you are conducting a different test that should have the same outcome, extract those assertions to a helper.</em></p>
 
 <h4>Leave repeated code that is the same <em>by happenstance</em>
 </h4>
 
-<p>Why? <em>This sort of duplication is OK becauser they code is only the same by happenstance, and may diverge as the code matures.  By leaving it seperate, it's easier to change</em></p>
+<p>Why? <em>This sort of duplication is OK because the code is only the same by happenstance, and may diverge as the code matures.  By leaving it seperate, it's easier to change</em></p>
 
 <h4>The 'When' part of your tests should ideally use the public API of the class under test.</h4>
 
@@ -772,7 +772,7 @@
 
 <h4>There should be very few <code>if</code> statements; controllers should be as dumb as possible</h4>
 
-<p>Why? <em><code>if</code> statements usually imply business logic, which does not belong in controllers.  The logic in the controller should be mainly concerned with send the correct response to the user.</em></p>
+<p>Why? <em><code>if</code> statements usually imply business logic, which does not belong in controllers.  The logic in the controller should be mainly concerned with sending the correct response to the user.</em></p>
 
 <h4>Avoid excessive filters, or filters that are highly conditional</h4>
 
@@ -797,7 +797,7 @@
 <div class="highlight"><pre><span class="c1"># A view for a person's credit cards requires the person's name, and a list of last-4, type, and expiration date of cards</span>
 
 <span class="c1"># Wrong; the view must navigate through the person to get his credit cards and has</span>
-<span class="c1"># access to the entire person objects, which is not needed</span>
+<span class="c1"># access to the entire person object, which is not needed</span>
 <span class="k">def</span> <span class="nf">show</span>
   <span class="vi">@person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:person_id</span><span class="o">]</span><span class="p">)</span>
 <span class="k">end</span>
@@ -812,7 +812,7 @@
 <span class="c1"># Right; the ivars represent what the view needs AND contain only what the view needs.</span>
 <span class="c1"># You may wish to use a more sophisticated "presenter" pattern instead of OpenStruct</span>
 <span class="k">def</span> <span class="nf">show</span>
-  <span class="vi">@person_name</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:person_id</span><span class="o">].</span><span class="n">full_name</span>
+  <span class="vi">@person_name</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:person_id</span><span class="o">]</span><span class="p">)</span><span class="o">.</span><span class="n">full_name</span>
   <span class="vi">@credit_cards</span> <span class="o">=</span> <span class="vi">@person</span><span class="o">.</span><span class="n">credit_cards</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">card</span><span class="o">|</span>
     <span class="no">OpenStruct</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:last_four</span> <span class="o">=&gt;</span> <span class="n">card</span><span class="o">.</span><span class="n">last_four</span><span class="p">,</span> 
                    <span class="ss">:card_type</span> <span class="o">=&gt;</span> <span class="n">card</span><span class="o">.</span><span class="n">card_type</span><span class="p">,</span>
@@ -823,11 +823,11 @@
 
 <h4>Do not create ivars unless they are to be shared with the views.</h4>
 
-<p>Why? <em>Using instance variables to avoid passing parameters is lazy and creates complex and hard-to-understand code.  In a controller, instance variables are special: they represent the data passed to the views, and that's all they should be used for.</em></p>
+<p>Why? <em>Controllers are special types of classes.  You don't instantiate them, and the don't hold state.  ivars in a controller are <em>only</em> for passing data to a view.  If you need to pass data to prive methods, use method arguments.</em></p>
 
 <h3>Active Record</h3>
 
-<h4>Do not use hooks</h4>
+<h4>Avoid hooks</h4>
 
 <p>Why? <em>Hooks make your models very hard to use in different ways, and lock them to business rules that are likely not all that hard and fast.  They also make testing very difficult, as it becomes harder and harder to set up the correct state using objects that have excessive hooks on them.</em></p>
 
@@ -853,9 +853,9 @@
 <span class="k">end</span>
 </pre></div>
 
-<h4>Validations should not be conditional</h4>
+<h4>Conditional validations should be used with care</h4>
 
-<p>Why? <em>Validations that are not always applicable make it very hard to modify objects and enhance them, because it becomes increasingly difficult tor understand what a valid objects really is.  Further, it becomes very difficult to set up objects in a particular state for a given test if there are a lot of conditonal validations</em></p>
+<p>Why? <em>Validations that are not always applicable make it very hard to modify objects and enhance them, because it becomes increasingly difficult to understand what a valid object really is.  Further, it becomes very difficult to set up objects in a particular state for a given test if there are a lot of conditonal validations</em></p>
 
 <h4>Use database constraints to enforce valid data in the database</h4>
 
@@ -863,7 +863,7 @@
 
 <h4>AR objects should be as dumb as possible; only derived values should be new methods</h4>
 
-<p>Why? <em>It may be tempting to add business logic to your models.  This instanvce violates the single responsiblity principal, but it also makes the classes harder and harder to understand, test, and modify.  Treat your modesl as dumb structs with persistence, and put all other concerns on other classes.  Do not just mix in a bunch of modules.</em></p>
+<p>Why? <em>It may be tempting to add business logic to your models, but this violates the single responsibility principle, and makes the classes harder and harder to understand, test, and modify.  Treat your models as dumb structs with persistence, and put all other concerns on other classes.  Do not just mix in a bunch of modules.</em></p>
       </section>
       <footer>
         <p>Project maintained by <a href="https://github.com/davetron5000">davetron5000</a></p>
