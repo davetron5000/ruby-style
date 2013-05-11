@@ -19,8 +19,8 @@
     }.reject { |man|
       man.age > 19 || man.age < 13
     }
-- :rule: "Blocks that do not return a value or a value you will ignore use `do..end`"
-  :why: "These blocks are more like control structures, so `do..end` is more natural.  It sets them off from blocks that produce a useful value"
+- :rule: "Blocks that do not return a value, return a value you will ignore, or represent a method definition use `do..end`"
+  :why: "These blocks are more like control structures or methods, so `do..end` is more natural.  It sets them off from blocks that produce a useful value"
 - :rule: "Always use parens when calling methods with arguments unless you are coding in a heavy 'DSL Style' bit of code"
   :why: "Parens visually set off the parameters, and reduce confusion about how Ruby will parse the line, making the code easier to maintain"
   :example: |
