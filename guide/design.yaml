@@ -40,7 +40,7 @@
     # Correct; Option 2 - setter injection with a sensible default
     class View
       attr_writer :person_formatter
-      def initialize(person_formatter)
+      def initialize
         @person_formatter = PersonFormatter.new
       end
 
