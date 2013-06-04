@@ -51,7 +51,7 @@
   :why: "Visual clearance"
 - :rule: "A newline after `end` unless it's the string of `end`s for the end of the class/module"
   :why: "I don't get much value from visual clearance for the end blocks that 'close' a class or module"
-- :rule: "Class methods should be defined via `def self.class_name` and not inside a `class << self`"
+- :rule: "Class methods should be defined via `def self.method_name` and not inside a `class << self`"
   :why: "This reduces errors caused by moving methods around, and also doesn't require you to scroll up in the class to determine what type of method it is; you can see it instantly"
 - :rule: "When using the return value of an `if` expression, indent the `else` and `end` with the `if`:"
   :why: "This makes it very clear that you are using `if..else..end` as a complex expression and not as a control structure"
