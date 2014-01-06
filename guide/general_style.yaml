@@ -1,6 +1,6 @@
 ---
-- :rule: "Avoid 1.9-style hash syntax"
-  :why: "This syntax only works if your hash keys are symbols; otherwise you have to use the old syntax.  There's a very limited benefit to the new syntax, and the cost is two ways of doing things, increasing mental overhead when reading/writing code.  Further, for libraries, 1.8 compatibility is nice to achieve"
+- :rule: "Use 1.9-style hash syntax only when the hashs keys are all symbols"
+  :why: "Although this creates two ways to format a hash, it's much more common to use symbols for hash keys, and this style is more compact"
 - :rule: "For libraries or CLI apps, stick to 1.8-compatible features where possible"
   :why: "Many shops are still on 1.8, and many systems have 1.8 as the default, so there's no reason not to keep 1.8 compatible for code that will be shared"
 - :rule: "Blocks that return a value you intend to use should use curly braces"
@@ -106,3 +106,22 @@
     end
 - :rule: "If your method returns true or false, be sure those are the only values returned."
   :why: "Returning a 'truthy' value will lead to unintended consequences, and could lead to complex dependencies in your code.  You don't need the hassle"
+- :rule: "Literal arrays or hashes should have a comma after *every* element, including the last one"
+  :why: "This makes it easier to add elements and reorder elements without having to worry about missing commas"
+- :rule: "When declaring attributes with `attr_reader` or `attr_accessor`, put one per line"
+  :why: "This makes it easier to add new attributes without creating complex diffs.  It also documents what the attributes represent"
+  :example: |
+    # Wrong; hard to modify
+    attr_accessor :first_name, :last_name, :gender
+
+    # Right; we can easily modify and document
+    attr_accessor :first_name
+    attr_accessor :last_name
+    attr_accessor :gender
+
+    # Also good; we can easily modify and document
+    attr_accessor :first_name,
+                  :last_name,
+                  :gender
+- :rule: "Class methods should be defined via `def self.class_name` and not inside a `class << self`"
+  :why: "This reduces errors caused by moving methods around, and also doesn't require you to scroll up in the class to determine what type of method it is; you can see it instantly"

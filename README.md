@@ -38,17 +38,155 @@ Why? _Test dir is then sorted by classname, making it easy to visually scan or a
 
 
 
-## Formatting
+## Typography
+
+#### Code readability is more important that diff readability
+
+Why? _Although formatting changes in diffs can make them harder to understand, the code is more likely to be read in its complete state, and so your typography choices should favor that state_
+
 
 #### 2-space indent
 
 Why? _this is standard across almost all Ruby code_
 
 
-#### For more than 2 groups of arrowed, equaled, or coloned lines (e.g. a hash or set of local variables), align the operators so that the code forms a 'table'
+#### Hashes created with hashrockets (=>) should be formatted with the keys left-aligned, and hashrockets right aligned to the values
 
 Why? _Although it's extra work to maintain and can break diffs, I feel that the clarity and readability of this structure is worth it - the code is read many more times than changed_
 
+```ruby
+# Wrong; no visual order
+hash = {
+  "first_name" => "Dave",
+  "last_name" => "Copeland",
+  "town" => "DC",
+  "country" => "US",
+}
+
+# Right; easy to read
+hash = {
+  "first_name" => "Dave",
+  "last_name"  => "Copeland",
+  "town"       => "DC",
+  "country"    => "US",
+}
+```
+
+#### Hashes created in the 1.9 style should have their keys right-alighted so that the colons for a single, vertical line
+
+Why? _This makes the hash options easy to read, and creates a nice visual separation between keys and values_
+
+```ruby
+# Wrong; no visual order, hard to read
+options = {
+  first_name: "Dave",
+  last_name: "Copeland",
+  town: "DC",
+  country: "US",
+}
+
+# Right; easy to read and format
+options = {
+  first_name: "Dave",
+   last_name: "Copeland",
+        town: "DC",
+     country: "US",
+}
+```
+
+#### For bulk assignments (3 or more assignments in a row), align the equals signs, with the left-hand side left-aligned
+
+Why? _Makes the big section of assignments easier to read and to distinguish from the rest of a routine_
+
+```ruby
+def initialize(first_name, last_name, town, country)
+  # Wrong, harder to read
+  @first_name = first_name
+  @last_name = first_name
+  @town = town
+  @country = country
+end
+
+def initialize(first_name, last_name, town, country)
+  # Right, easier to read
+  @first_name = first_name
+  @last_name  = first_name
+  @town       = town
+  @country    = country
+end
+```
+
+#### When you have a large block of assignments that are using a mix of literals, local variables, and names with sigils (ivars, class ivars, or globals), consider aligning names rather than symbols
+
+Why? _Aligning names allows you to easily read for content, because your syntax highlighting editor can color-code symbols to allow you to later read for sources of data_
+
+```ruby
+# Obviously terrible
+attrs[:first_name] = @first_name
+attrs[:last_name] = last_name
+attrs[:town] = @@default_town
+attrs[:country] = $only_country_we_support
+attrs[:title] = "Mister"
+
+# Better, but not the best
+attrs[:first_name] = @first_name
+attrs[:last_name]  = last_name
+attrs[:town]       = @@default_town
+attrs[:country]    = $only_country_we_support
+attrs[:title]      = "Mister"
+
+# MUCH better - names are aligned for readibility, but we aren't 
+# obscuring the source of these symbols
+attrs[:first_name] =  @first_name
+attrs[:last_name]  =   last_name
+attrs[:town]       = @@default_town
+attrs[:country]    =  $only_country_we_support
+attrs[:title]      =  "Mister"
+```
+
+#### Align open braces in a block of RSpec lets
+
+Why? _Visually distinguishes the set of variables relevant to the tests_
+
+```ruby
+context "when we have all the data" do
+  # Wrong; harder to read
+  let(:first_name) { "Dave" }
+  let(:last_name) { "Copeland" }
+  let(:town) { "DC" }
+  let(:country) { "USA" }
+
+  # Right; easy to read and modify
+  let(:first_name) { "Dave" }
+  let(:last_name)  { "Copeland" }
+  let(:town)       { "DC" }
+  let(:country)    { "USA" }
+end
+```
+
+#### For blocks of assertions in tests, align the expected and received to ensure visual alignment
+
+Why? _This creates a nice, readable list of assertions about your code_
+
+```ruby
+# Test::Unit style
+assert_equal     "Dave",     person.first_name
+assert_equal     "Copeland", person.last_name
+assert_equal     "DC",       person.town
+assert_not_equal "UK",       person.country
+
+# RSpec should style
+person.first_name.should  == "Dave"
+person.last_name.should   == "Copeland"
+person.town.should        == "DC"
+person.country.should_not == "UK"
+
+# RSpec expect style
+expect(person.first_name).to  eq("Dave")
+expect(person.last_name).to   eq("Copeland")
+expect(person.town).to        eq("DC")
+expect(person.country).not_to eq("UK")
+```
 
 #### Avoid single-line methods
 
@@ -60,33 +198,20 @@ Why? _Single-line methods are harder to change when the method needs an addition
 Why? _Excessively long lines can be very difficult to read and understand; a low line length encourages keeping things simple_
 
 
-#### Literal arrays or hashes should have a comma after *every* element, including the last one
-
-Why? _This makes it easier to add elements and reorder elements without having to worry about missing commas_
-
-
 #### For 'options-hash' calls, align keys across multiple lines, one per line, e.g.
 
 Why? _This makes it easier to read and modify the options sent to the method_
 
 ```ruby
-some_call(non_option1,non_option2,:foo => "bar",
-                                  :blah => "quux",
-                                  :bar => 42)
-```
-
-#### When declaring attributes with `attr_reader` or `attr_accessor`, put one per line
-
-Why? _This makes it easier to add new attributes without creating complex diffs.  It also documents what the attributes represent_
-
-```ruby
-# Wrong; hard to modify
-attr_accessor :first_name, :last_name, :gender
-
-# Right; we can easily modify and document
-attr_accessor :first_name
-attr_accessor :last_name
-attr_accessor :gender
+# OK; options are lined up
+some_call(non_option1,non_option2,foo: "bar",
+                                 blah: "quux",
+                                  bar: 42)
+# Better; distinction between args and options is more apparent
+some_call(non_option1, non_option2,
+          foo: "bar",
+         blah: "quux",
+          bar: 42)
 ```
 
 #### Literal lists should be on one line or one element per line, depending on length
@@ -96,7 +221,7 @@ Why? _Two-dimensional data is hard to read and modify._
 
 #### `protected` and `private` should be aligned with `class`
 
-Why? _No reason, just my personal preference_
+Why? _Creates a visual distinction between the sections of code_
 
 ```ruby
 class SomeClass
@@ -281,9 +406,9 @@ Why? _Using modules just for namespacing is, again, specifying things, which are
 
 ## General Style
 
-#### Avoid 1.9-style hash syntax
+#### Use 1.9-style hash syntax only when the hashs keys are all symbols
 
-Why? _This syntax only works if your hash keys are symbols; otherwise you have to use the old syntax.  There's a very limited benefit to the new syntax, and the cost is two ways of doing things, increasing mental overhead when reading/writing code.  Further, for libraries, 1.8 compatibility is nice to achieve_
+Why? _Although this creates two ways to format a hash, it's much more common to use symbols for hash keys, and this style is more compact_
 
 
 #### For libraries or CLI apps, stick to 1.8-compatible features where possible
@@ -428,6 +553,35 @@ end
 #### If your method returns true or false, be sure those are the only values returned.
 
 Why? _Returning a 'truthy' value will lead to unintended consequences, and could lead to complex dependencies in your code.  You don't need the hassle_
+
+
+#### Literal arrays or hashes should have a comma after *every* element, including the last one
+
+Why? _This makes it easier to add elements and reorder elements without having to worry about missing commas_
+
+
+#### When declaring attributes with `attr_reader` or `attr_accessor`, put one per line
+
+Why? _This makes it easier to add new attributes without creating complex diffs.  It also documents what the attributes represent_
+
+```ruby
+# Wrong; hard to modify
+attr_accessor :first_name, :last_name, :gender
+
+# Right; we can easily modify and document
+attr_accessor :first_name
+attr_accessor :last_name
+attr_accessor :gender
+
+# Also good; we can easily modify and document
+attr_accessor :first_name,
+              :last_name,
+              :gender
+```
+
+#### Class methods should be defined via `def self.class_name` and not inside a `class << self`
+
+Why? _This reduces errors caused by moving methods around, and also doesn't require you to scroll up in the class to determine what type of method it is; you can see it instantly_
 
 
 ## Design
@@ -861,6 +1015,16 @@ end
 #### Do not create ivars unless they are to be shared with the views.
 
 Why? _Controllers are special types of classes.  You don't instantiate them, and the don't hold state.  ivars in a controller are *only* for passing data to a view.  If you need to pass data to prive methods, use method arguments._
+
+
+#### Don't reach for a presenter or decorator when a non-ActiveRecord model class will do
+
+Why? _Often, a controller is exposing a logical model in your domain that just happens to be made up of data from various tables of your database.  Name the model that, instead of, e.g. <code>UserPresenter</code>_
+
+
+#### When using presenters, prefer a design where the presenter is a dumb struct, and the logic of what goes where lives in one factory method
+
+Why? _Structs are easier to work with, test, and enhance.  See <a href='http://technology.stitchfix.com/blog/2013/12/20/presenters-delegation-vs-structs/'>this blog post</a> for more_
 
 
 ### Active Record

@@ -44,3 +44,8 @@
    
 - :rule: "Do not create ivars unless they are to be shared with the views."
   :why: "Controllers are special types of classes.  You don't instantiate them, and the don't hold state.  ivars in a controller are *only* for passing data to a view.  If you need to pass data to prive methods, use method arguments."
+
+- :rule: "Don't reach for a presenter or decorator when a non-ActiveRecord model class will do"
+  :why: "Often, a controller is exposing a logical model in your domain that just happens to be made up of data from various tables of your database.  Name the model that, instead of, e.g. <code>UserPresenter</code>"
+- :rule: "When using presenters, prefer a design where the presenter is a dumb struct, and the logic of what goes where lives in one factory method"
+  :why: "Structs are easier to work with, test, and enhance.  See <a href='http://technology.stitchfix.com/blog/2013/12/20/presenters-delegation-vs-structs/'>this blog post</a> for more"
