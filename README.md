@@ -546,7 +546,7 @@ Why? _Instance variables are a form of global data, and your routines' complexit
 
 #### Private methods should be used to make public methods clear; they should avoid reliance on ivars if at all possible
 
-Why? _Private methods that do not rely on instance variables can very easily be extracted to new classes when things get compledx_
+Why? _Private methods that do not rely on instance variables can very easily be extracted to new classes when things get complex_
 
 
 #### Private methods calling more private methods might indicate a second class is hiding inside this class
